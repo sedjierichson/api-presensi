@@ -19,6 +19,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     else if(isset($_GET['nik_pegawai'])){
         $res = $detailizin->getDataByNIKPegawai($_GET['nik_pegawai']);
     }
+    else if(isset($_GET['nik_atasan'])){
+        $res = $detailizin->getDataByNIKAtasan($_GET['nik_atasan']);
+    }
+    else if(isset($_GET['id_izin'])){
+        $res = $detailizin->getDataByJenisIzin($_GET['id_izin']);
+    }
     else{
         $res = $detailizin->getAllData();
     }
@@ -31,48 +37,55 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     } else {
         $result = array(
             'status' => 0,
-            'message' => 'Data Webinar tidak ditemukan'
+            'message' => 'Data Izin tidak ditemukan'
         );
     }
 
     echo json_encode($result);
-    
-    // else{
-    // $res = $detailizin->getAllData();
-    // $num = $res->rowCount();
 
-    // if ($num > 0) {
-    //     $result = array(
-    //         'status' => 1,
-    //         'data' => array()
-    //     );
+} else if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+    $result = array(
+        'status' => 0,
+        'message' => 'Test 1234'
+    );
 
-    //     while ($row = $res->fetch(PDO::FETCH_ASSOC)) {
-    //         extract($row);
-    //         $user_item = array(
-    //             'id' => $id,
-    //             'id_jenis_izin' => $id_jenis_izin,
-    //             'tipe_izin' => $tipe_izin,
-    //             'nik_pegawai' => $nik_pegawai,
-    //             'nik_atasan' => $nik_atasan,
-    //             'tanggal_awal' => $tanggal_awal,
-    //             'tanggal_akhir' => $tanggal_akhir,
-    //             'jam_awal' => $jam_awal,
-    //             'jam_akhir' => $jam_akhir,
-    //             'alasan' => $alasan,
-    //             'tempat_tujuan' => $tempat_tujuan,
-    //             'uraian_tugas' => $uraian_tugas,
-    //         );
-    //         array_push($result['data'], $user_item);
-    //     }
-    // // } 
-    // else {
-    //     $result = array(
-    //         'status' => 0,
-    //         'message' => 'No users found'
-    //     );
-    // }
-    // echo json_encode($result);
-// }
-    
+    // $data = json_decode(file_get_contents("php://input"));
+    // if (isset($data->nik_pegawai) && isset($data->nik_atasan) && isset($data->tanggal_izin) && isset($data->jam_izin_pulang) && isset($data->alasan)){
+    if(isset($_POST['nik_pegawai']) && isset($_POST['nik_atasan']) && isset($_POST['tanggal_izin']) && isset($_POST['jam_izin_pulang']) && isset($_POST['alasan'])){
+        $tmp = $detailizin->insertIzinPulangCepat($_POST['nik_pegawai'], $_POST['nik_atasan'], $_POST['tanggal_izin'], $_POST['jam_izin_pulang'], $_POST['alasan']);
+
+        if ($tmp == false) {
+            $result['status'] = 0;
+            $result['message'] = "Data gagal diinput";
+        } else {
+            header("HTTP/1.1 201 Created");
+            $result['status'] = 1;
+            $result['message'] = $tmp;
+        }
+    } else if (isset($_POST['nik_pegawai']) && isset($_POST['nik_atasan']) && isset($_POST['tanggal_izin']) && isset($_POST['jam_awal']) && isset($_POST['jam_akhir']) &&isset($_POST['alasan'])){
+        $tmp = $detailizin->insertIzinMeninggalkanKantor($_POST['nik_pegawai'], $_POST['nik_atasan'], $_POST['tanggal_izin'], $_POST['jam_awal'], $_POST['jam_akhir'], $_POST['alasan']);
+        if ($tmp == false) {
+            $result['status'] = 0;
+            $result['message'] = "Data gagal diinput";
+        } else {
+            header("HTTP/1.1 201 Created");
+            $result['status'] = 1;
+            $result['message'] = $tmp;
+        }
+    } else if (isset($_POST['nik_pegawai']) && isset($_POST['nik_atasan']) && isset($_POST['tanggal_awal']) && isset($_POST['tanggal_akhir']) && isset($_POST['uraian_tugas']) &&isset($_POST['tempat_tujuan'])){
+        $tmp = $detailizin->insertIzinSuratTugas($_POST['nik_pegawai'], $_POST['nik_atasan'], $_POST['tanggal_awal'], $_POST['tanggal_akhir'], $_POST['uraian_tugas'], $_POST['tempat_tujuan']);
+        if ($tmp == false) {
+            $result['status'] = 0;
+            $result['message'] = "Data gagal diinput";
+        } else {
+            header("HTTP/1.1 201 Created");
+            $result['status'] = 1;
+            $result['message'] = $tmp;
+        }
+    }
+    else {
+        $result['status'] = 0;
+        $result['message'] = "Pastikan semua parameter sudah lengkap";
+    }
+    echo json_encode($result);
 }
