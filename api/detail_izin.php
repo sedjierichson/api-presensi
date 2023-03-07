@@ -82,10 +82,50 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             $result['status'] = 1;
             $result['message'] = $tmp;
         }
+    } else if (isset($_POST['nik_pegawai']) && isset($_POST['nik_atasan']) && isset($_POST['tanggal_lupa_absen']) && isset($_POST['jam_awal']) && isset($_POST['jam_akhir']) &&isset($_POST['alasan'])){
+        $tmp = $detailizin->insertIzinMeninggalkanKantor($_POST['nik_pegawai'], $_POST['nik_atasan'], $_POST['tanggal_lupa_absen'], $_POST['jam_awal'], $_POST['jam_akhir'], $_POST['alasan']);
+        if ($tmp == false) {
+            $result['status'] = 0;
+            $result['message'] = "Data gagal diinput";
+        } else {
+            header("HTTP/1.1 201 Created");
+            $result['status'] = 1;
+            $result['message'] = $tmp;
+        }
     }
     else {
         $result['status'] = 0;
         $result['message'] = "Pastikan semua parameter sudah lengkap";
     }
     echo json_encode($result);
+
+} else if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
+    $result = array(
+        'status' => 0,
+        'message' => ''
+    );
+    $data = json_decode(file_get_contents("php://input"));
+    if (isset($data->id)) {
+        $tmp = $detailizin->deactivateData($data->id);
+
+        if ($tmp) {
+            $result['status'] = 1;
+            $result['message'] = "Data berhasil dihapus";
+        } else {
+            $result['status'] = 0;
+            $result['message'] = "Data gagal dihapus";
+        }
+    } else {
+        $result['status'] = 0;
+        $result['message'] = "Pastikan parameter sudah terisi";
+    }
+    echo json_encode($result);
+}
+else {
+    header("HTTP/1.1 400 Bad Request");
+    $error = array(
+        'error' => 'Method not Allowed'
+    );
+
+    echo json_encode($error);
 }

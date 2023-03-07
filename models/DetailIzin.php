@@ -107,4 +107,29 @@ class DetailIzin{
             return false;
         }
     }
+    public function insertIzinLupaAbsen($nik_pegawai, $nik_atasan, $tanggal_lupa_absen, $jam_awal, $jam_akhir, $alasan){
+        $query = "INSERT INTO `$this->table` VALUES (DEFAULT, 4, ?, ?, ?, NULL, ?, ?, ?, NULL, NULL, 1)";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute([(int)$nik_pegawai, (int)$nik_atasan, $tanggal_lupa_absen, $jam_awal, $jam_akhir, $alasan]);
+
+        if ($stmt->rowCount() > 0) {
+            $query_take = "SELECT * FROM `$this->table` ORDER BY id DESC LIMIT 1";
+            $stmt = $this->conn->prepare($query_take);
+            $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $row['id'];
+        } else {
+            return false;
+        }
+    }
+    public function deactivateData($id) {
+        $query = "UPDATE `$this->table` SET status = 0 WHERE id = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute([(int)$id]);
+        if ($stmt->rowCount() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
