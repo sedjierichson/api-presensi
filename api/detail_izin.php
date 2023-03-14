@@ -51,8 +51,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
     // $data = json_decode(file_get_contents("php://input"));
     // if (isset($data->nik_pegawai) && isset($data->nik_atasan) && isset($data->tanggal_izin) && isset($data->jam_izin_pulang) && isset($data->alasan)){
-    if(isset($_POST['nik_pegawai']) && isset($_POST['nik_atasan']) && isset($_POST['tanggal_izin']) && isset($_POST['jam_izin_pulang']) && isset($_POST['alasan'])){
-        $tmp = $detailizin->insertIzinPulangCepat($_POST['nik_pegawai'], $_POST['nik_atasan'], $_POST['tanggal_izin'], $_POST['jam_izin_pulang'], $_POST['alasan']);
+    if(isset($_POST['nik_pegawai']) && isset($_POST['nik_atasan']) && isset($_POST['tanggal_izin']) && isset($_POST['jam_izin_pulang']) && isset($_POST['alasan']) && isset($_POST['tanggal_pengajuan'])){
+        $tmp = $detailizin->insertIzinPulangCepat($_POST['nik_pegawai'], $_POST['nik_atasan'], $_POST['tanggal_izin'], $_POST['jam_izin_pulang'], $_POST['alasan'], $_POST['tanggal_pengajuan']);
 
         if ($tmp == false) {
             $result['status'] = 0;
@@ -62,8 +62,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             $result['status'] = 1;
             $result['message'] = $tmp;
         }
-    } else if (isset($_POST['nik_pegawai']) && isset($_POST['nik_atasan']) && isset($_POST['tanggal_izin']) && isset($_POST['jam_awal']) && isset($_POST['jam_akhir']) &&isset($_POST['alasan'])){
-        $tmp = $detailizin->insertIzinMeninggalkanKantor($_POST['nik_pegawai'], $_POST['nik_atasan'], $_POST['tanggal_izin'], $_POST['jam_awal'], $_POST['jam_akhir'], $_POST['alasan']);
+    } else if (isset($_POST['nik_pegawai']) && isset($_POST['nik_atasan']) && isset($_POST['tanggal_izin']) && isset($_POST['jam_awal']) && isset($_POST['jam_akhir']) &&isset($_POST['alasan']) && isset($_POST['tanggal_pengajuan'])){
+        $tmp = $detailizin->insertIzinMeninggalkanKantor($_POST['nik_pegawai'], $_POST['nik_atasan'], $_POST['tanggal_izin'], $_POST['jam_awal'], $_POST['jam_akhir'], $_POST['alasan'], $_POST['tanggal_pengajuan']);
         if ($tmp == false) {
             $result['status'] = 0;
             $result['message'] = "Data gagal diinput";
@@ -72,8 +72,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             $result['status'] = 1;
             $result['message'] = $tmp;
         }
-    } else if (isset($_POST['nik_pegawai']) && isset($_POST['nik_atasan']) && isset($_POST['tanggal_awal']) && isset($_POST['tanggal_akhir']) && isset($_POST['uraian_tugas']) &&isset($_POST['tempat_tujuan'])){
-        $tmp = $detailizin->insertIzinSuratTugas($_POST['nik_pegawai'], $_POST['nik_atasan'], $_POST['tanggal_awal'], $_POST['tanggal_akhir'], $_POST['uraian_tugas'], $_POST['tempat_tujuan']);
+    } else if (isset($_POST['nik_pegawai']) && isset($_POST['nik_atasan']) && isset($_POST['tanggal_awal']) && isset($_POST['tanggal_akhir']) && isset($_POST['uraian_tugas']) && isset($_POST['tempat_tujuan']) && isset($_POST['tanggal_pengajuan'])){
+        $tmp = $detailizin->insertIzinSuratTugas($_POST['nik_pegawai'], $_POST['nik_atasan'], $_POST['tanggal_awal'], $_POST['tanggal_akhir'], $_POST['uraian_tugas'], $_POST['tempat_tujuan'], $_POST['tanggal_pengajuan']);
         if ($tmp == false) {
             $result['status'] = 0;
             $result['message'] = "Data gagal diinput";
@@ -82,8 +82,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             $result['status'] = 1;
             $result['message'] = $tmp;
         }
-    } else if (isset($_POST['nik_pegawai']) && isset($_POST['nik_atasan']) && isset($_POST['tanggal_lupa_absen']) && isset($_POST['jam_awal']) && isset($_POST['jam_akhir']) &&isset($_POST['alasan'])){
-        $tmp = $detailizin->insertIzinMeninggalkanKantor($_POST['nik_pegawai'], $_POST['nik_atasan'], $_POST['tanggal_lupa_absen'], $_POST['jam_awal'], $_POST['jam_akhir'], $_POST['alasan']);
+    } else if (isset($_POST['nik_pegawai']) && isset($_POST['nik_atasan']) && isset($_POST['tanggal_lupa_absen']) && isset($_POST['jam_awal']) && isset($_POST['jam_akhir']) &&isset($_POST['alasan']) && isset($_POST['tanggal_pengajuan'])){
+        $tmp = $detailizin->insertIzinLupaAbsen($_POST['nik_pegawai'], $_POST['nik_atasan'], $_POST['tanggal_lupa_absen'], $_POST['jam_awal'], $_POST['jam_akhir'], $_POST['alasan'], $_POST['tanggal_pengajuan']);
         if ($tmp == false) {
             $result['status'] = 0;
             $result['message'] = "Data gagal diinput";
