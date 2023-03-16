@@ -86,7 +86,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             $result['status'] = 0;
             $result['message'] = "Security code gagal diupdate";
         }
-    } else {
+    } else if (isset($data->nik) && isset($data->imei)){
+        // $kantor->nama = $data->nama;
+        // $kantor->alamat = $data->alamat;
+        $tmp = $pegawai->updateIMEI($data->nik, $data->imei);
+
+        if ($tmp) {
+            $result['status'] = 1;
+            $result['message'] = "IMEI berhasil diupdate";
+        } else {
+            $result['status'] = 0;
+            $result['message'] = "IMEI gagal diupdate";
+        }
+    }
+     else {
         $result['status'] = 0;
         $result['message'] = "Pastikan parameter sudah terisi";
     }

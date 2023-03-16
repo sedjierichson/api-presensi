@@ -52,4 +52,14 @@ class Pegawai{
             return false;
         }
     }
+    public function updateIMEI($nik, $imei){
+        $query = "UPDATE `$this->table` SET imei = ? WHERE nik = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute([$imei, (int)$nik]);
+        if ($stmt->rowCount() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
