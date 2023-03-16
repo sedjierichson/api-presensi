@@ -61,6 +61,14 @@ class Presensi{
         return $row;
     }
 
+    public function getUserSudahAbsenMasuk() {
+        $query = "SELECT * FROM presensi_pegawai WHERE nik = ? AND tanggal = ? AND jam_masuk <> 0 LIMIT 1;";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute([$this->nik, $this->tanggal]);
+        // return $this->nik;
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
     public function insertPresensiMasukPegawai($nik, $id_kantor, $tanggal, $jam_masuk, $foto){
         $query = "INSERT INTO `$this->table` VALUES (DEFAULT, ?, ?, ?, ?, NULL, ?, 1)";
         $stmt = $this->conn->prepare($query);

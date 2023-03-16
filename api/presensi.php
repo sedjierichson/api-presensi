@@ -14,11 +14,20 @@ $presensi = new Presensi($db);
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     if (isset($_GET['id'])) {
         $res = $presensi->getSingleData($_GET['id']);
-    } else if (isset($_GET['nik'])) {
+    } 
+    else if (isset($_GET['nik'])) {
         $res = $presensi->getDataByNIKPegawai($_GET['nik']);
-    }else if (isset($_GET['id_kantor'])) {
+    }
+    else if (isset($_GET['id_kantor'])) {
         $res = $presensi->getDataByIdKantor($_GET['id_kantor']);
-    } else {
+    } 
+    else if (isset($_GET['nik_pegawai']) && isset($_GET['tanggal_absen'])) {
+        $presensi->nik = (isset($_GET['nik_pegawai'])) ? $_GET['nik_pegawai'] : null;
+        $presensi->tanggal = (isset($_GET['tanggal_absen'])) ? $_GET['tanggal_absen'] : null;
+        // $res = $presensi->getUserSudahAbsenMasuk($_GET['nik'], $_GET['tanggal_absen']);
+        $res = $presensi->getUserSudahAbsenMasuk();
+    }
+     else {
         $res = $presensi->getAllData();
     }
 
