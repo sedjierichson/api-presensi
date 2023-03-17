@@ -25,7 +25,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $presensi->nik = (isset($_GET['nik_pegawai'])) ? $_GET['nik_pegawai'] : null;
         $presensi->tanggal = (isset($_GET['tanggal_absen'])) ? $_GET['tanggal_absen'] : null;
         // $res = $presensi->getUserSudahAbsenMasuk($_GET['nik'], $_GET['tanggal_absen']);
+        if($_GET['mode']){
+            $res = $presensi -> getUserSudahAbsenLengkap();
+        } else {
         $res = $presensi->getUserSudahAbsenMasuk();
+        }
+
     }
      else {
         $res = $presensi->getAllData();

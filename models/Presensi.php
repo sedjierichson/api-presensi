@@ -62,26 +62,56 @@ class Presensi{
     }
 
     public function getUserSudahAbsenMasuk() {
-        $query = "SELECT * FROM presensi_pegawai WHERE nik = ? AND tanggal = ? AND jam_masuk <> 0 LIMIT 1;";
+        $query = "SELECT * FROM presensi_pegawai WHERE nik = ? AND tanggal = ? AND jam_masuk <> 0 ORDER BY id DESC LIMIT 1;";
         $stmt = $this->conn->prepare($query);
         $stmt->execute([$this->nik, $this->tanggal]);
         // return $this->nik;
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($stmt->rowCount() > 0) {
-            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row;
+
+        // if ($stmt->rowCount() > 0) {
+        //     $row = $stmt->fetch(PDO::FETCH_ASSOC);
             
-                    return [
-                        'status' => 1,
-                        'message' => (int)$row['id']
-                    ];
+        //             return [
+        //                 'status' => 1,
+        //                 'message' => (int)$row['id']
+        //             ];
               
-        } else {
-            return [
-                'status' => 0,
-                'message' => 'Data Anda tidak ditemukan'
-            ];
-        }
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        // } else {
+        //     return [
+        //         'status' => 0,
+        //         'message' => 'Data Anda tidak ditemukan'
+        //     ];
+        // }
+        // return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+    public function getUserSudahAbsenLengkap() {
+        $query = "SELECT * FROM presensi_pegawai WHERE nik = ? AND tanggal = ? AND jam_masuk <> 0 and jam_keluar <> 0 ORDER BY id DESC LIMIT 1;";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute([$this->nik, $this->tanggal]);
+        // $stmt = $this->conn->prepare($query);
+        // $stmt->execute([(int)$id]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $row;
+        // return $this->nik;
+        
+        // if ($stmt->rowCount() > 0) {
+        //     $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+        //             return [
+        //                 'status' => 1,
+        //                 'message' => (int)$row['id']
+        //             ];
+              
+        // } else {
+        //     return [
+        //         'status' => 0,
+        //         'message' => 'Data Anda tidak ditemukan'
+        //     ];
+        // }
+        // return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     public function insertPresensiMasukPegawai($nik, $id_kantor, $tanggal, $jam_masuk, $foto){
