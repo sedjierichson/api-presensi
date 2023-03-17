@@ -66,6 +66,21 @@ class Presensi{
         $stmt = $this->conn->prepare($query);
         $stmt->execute([$this->nik, $this->tanggal]);
         // return $this->nik;
+
+        if ($stmt->rowCount() > 0) {
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+                    return [
+                        'status' => 1,
+                        'message' => (int)$row['id']
+                    ];
+              
+        } else {
+            return [
+                'status' => 0,
+                'message' => 'Data Anda tidak ditemukan'
+            ];
+        }
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 

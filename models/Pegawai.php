@@ -24,6 +24,8 @@ class Pegawai{
         $stmt = $this->conn->prepare($query);
         $stmt->execute([$this->nik]);
 
+        
+
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
     public function insertUserBaru($nik, $security_code) {
