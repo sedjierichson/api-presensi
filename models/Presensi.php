@@ -114,10 +114,10 @@ class Presensi{
         // return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function insertPresensiMasukPegawai($nik, $id_kantor, $tanggal, $jam_masuk, $foto){
+    public function insertPresensiMasukPegawai($nik, $id_kantor, $tanggal, $jam_masuk, $url){
         $query = "INSERT INTO `$this->table` VALUES (DEFAULT, ?, ?, ?, ?, NULL, ?, 1)";
         $stmt = $this->conn->prepare($query);
-        $stmt->execute([(int)$nik, (int)$id_kantor, $tanggal, $jam_masuk, $foto]);
+        $stmt->execute([(int)$nik, (int)$id_kantor, $tanggal, $jam_masuk, $url]);
 
         if ($stmt->rowCount() > 0) {
             $query_take = "SELECT * FROM `$this->table` ORDER BY id DESC LIMIT 1";

@@ -5,6 +5,7 @@ header('Content-Type: application/json');
 
 require "../Database.php";
 require "../models/Presensi.php";
+require "upload.php";
 
 $database = new Database();
 $db = $database->connect();
@@ -55,17 +56,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         'message' => 'Test 1234'
     );
 
-    if(isset($_POST['nik']) && isset($_POST['id_kantor']) && isset($_POST['tanggal']) && isset($_POST['jam_masuk']) && isset($_POST['foto']) ){
-        $tmp = $presensi->insertPresensiMasukPegawai($_POST['nik'], $_POST['id_kantor'], $_POST['tanggal'], $_POST['jam_masuk'], $_POST['foto']);
+    if(isset($_POST['nik']) && isset($_POST['id_kantor']) && isset($_POST['tanggal']) && isset($_POST['jam_masuk']) && isset($_POST['image']) && isset($_POST['img_name'])){
+        // $uploadResult = uploadFile($_FILES, 'foto', 'files/');
 
-        if ($tmp == false) {
-            $result['status'] = 0;
-            $result['message'] = "Data gagal diinput";
-        } else {
-            header("HTTP/1.1 201 Created");
-            $result['status'] = 1;
-            $result['message'] = $tmp;
-        }
+        $image = $_POST['image'];
+        $name = $_POST['img_name'];
+        $realImage = base64_decode($image);
+
+        file_put_contents('files/'.$name, $realImage);
+        
+        // if ($uploadResult['status'] != 1) {
+        //     $result['status'] = 0;
+        //     $result['message'] = $uploadResult['message'];
+            
+        // } else {
+            $tmp = $presensi->insertPresensiMasukPegawai($_POST['nik'], $_POST['id_kantor'], $_POST['tanggal'], $_POST['jam_masuk'], 'http://127.0.0.1:8888/api-presensi/api-presensi/api/files/'.$_POST['img_name']);
+            if ($tmp == false) {
+                $result['status'] = 0;
+                $result['message'] = "Data gagal diinput";
+            } else {
+                header("HTTP/1.1 201 Created");
+                $result['status'] = 1;
+                $result['message'] = "Berhasil absen masuk";
+            }
+        // }
     }
     else {
         $result['status'] = 0;
