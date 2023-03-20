@@ -25,13 +25,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     else if (isset($_GET['nik_pegawai']) && isset($_GET['tanggal_absen'])) {
         $presensi->nik = (isset($_GET['nik_pegawai'])) ? $_GET['nik_pegawai'] : null;
         $presensi->tanggal = (isset($_GET['tanggal_absen'])) ? $_GET['tanggal_absen'] : null;
-        // $res = $presensi->getUserSudahAbsenMasuk($_GET['nik'], $_GET['tanggal_absen']);
-        if($_GET['mode']){
-            $res = $presensi -> getUserSudahAbsenLengkap();
-        } else {
+        // if($_GET['mode']){
+        //     $res = $presensi -> getUserSudahAbsenLengkap();
+        // } else {
         $res = $presensi->getUserSudahAbsenMasuk();
-        }
+        // }
 
+    }
+    else if (isset($_GET['nikk']) && isset($_GET['tahun']) && isset($_GET['bulan'])) {
+        $presensi->nikk = (isset($_GET['nikk'])) ? $_GET['nikk'] : null;
+        $presensi->tahun = (isset($_GET['tahun'])) ? $_GET['tahun'] : null;
+        $presensi->bulan = (isset($_GET['bulan'])) ? $_GET['bulan'] : null;
+        // $res = 'Masuk sini';
+        $res = $presensi -> getDataByNIKPegawaidanFilterTahunBulan();
     }
      else {
         $res = $presensi->getAllData();

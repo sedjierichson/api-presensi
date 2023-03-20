@@ -90,28 +90,19 @@ class Presensi{
         $query = "SELECT * FROM presensi_pegawai WHERE nik = ? AND tanggal = ? AND jam_masuk <> 0 and jam_keluar <> 0 ORDER BY id DESC LIMIT 1;";
         $stmt = $this->conn->prepare($query);
         $stmt->execute([$this->nik, $this->tanggal]);
-        // $stmt = $this->conn->prepare($query);
-        // $stmt->execute([(int)$id]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
         return $row;
-        // return $this->nik;
-        
-        // if ($stmt->rowCount() > 0) {
-        //     $row = $stmt->fetch(PDO::FETCH_ASSOC);
-            
-        //             return [
-        //                 'status' => 1,
-        //                 'message' => (int)$row['id']
-        //             ];
-              
-        // } else {
-        //     return [
-        //         'status' => 0,
-        //         'message' => 'Data Anda tidak ditemukan'
-        //     ];
-        // }
-        // return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+    public function getDataByNIKPegawaidanFilterTahunBulan() {
+        $query = "SELECT presensi_pegawai.id, presensi_pegawai.nik, presensi_pegawai.id_kantor, kantor.nama as lokasi, presensi_pegawai.tanggal, presensi_pegawai.jam_masuk, presensi_pegawai.jam_keluar, presensi_pegawai.foto, presensi_pegawai.status FROM `presensi_pegawai` LEFT JOIN kantor on kantor.id = presensi_pegawai.id_kantor WHERE YEAR(tanggal) = ? AND MONTH(tanggal) = ? AND nik = ? ORDER BY presensi_pegawai.tanggal DESC;";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute([$this->tahun, $this->bulan, $this->nikk]);
+        $row = [];
+        while($data = $stmt->fetch(PDO::FETCH_OBJ))
+            $row[] = $data;
+
+        return $row;
     }
 
     public function insertPresensiMasukPegawai($nik, $id_kantor, $tanggal, $jam_masuk, $url){
