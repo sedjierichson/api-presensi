@@ -99,7 +99,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     }
     echo json_encode($result);
 
-} else if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
+} else if ($_SERVER['REQUEST_METHOD'] == 'PUT'){
+    $result = array(
+        'status' => 0,
+        'message' => ''
+    );
+
+    $data = json_decode(file_get_contents("php://input"));
+    if (isset($data->id) && isset($data->mode)){
+        if($data->mode == "terima"){
+            $tmp = $detailizin->terimaIzin($data->id);
+        } else if ($data->mode == "tolak"){
+            $tmp = $detailizin->tolakIzin($data->id);
+        }
+
+        if ($tmp) {
+            $result['status'] = 1;
+            $result['message'] = "Status izin berhasil diupdate";
+        } else {
+            $result['status'] = 0;
+            $result['message'] = "Status izin gagal diupdate";
+        }
+    } else {
+        $result['status'] = 0;
+        $result['message'] = "Pastikan parameter sudah terisi";
+    }
+    echo json_encode($result);
+}
+
+else if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
     $result = array(
         'status' => 0,
         'message' => ''

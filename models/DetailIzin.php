@@ -9,7 +9,7 @@ class DetailIzin{
     }
 
     public function getAllData() {
-        $query = "SELECT detail_izin.id, detail_izin.id_jenis_izin, j.nama_izin as tipe_izin, detail_izin.nik_pegawai,detail_izin.nik_atasan, detail_izin.tanggal_awal, detail_izin.tanggal_akhir, detail_izin.jam_awal, detail_izin.jam_akhir, detail_izin.alasan, k.nama as tempat_tujuan, detail_izin.uraian_tugas, detail_izin.tanggal_pengajuan, detail_izin.tanggal_respon, detail_izin.status FROM detail_izin LEFT JOIN jenis_izin j ON j.id = detail_izin.id_jenis_izin LEFT JOIN kantor k on k.id = detail_izin.id_kantor_tujuan WHERE detail_izin.status <> 0 ORDER BY detail_izin.tanggal_pengajuan DESC;";
+        $query = "SELECT detail_izin.id, detail_izin.id_jenis_izin, j.nama_izin as tipe_izin, detail_izin.nik_pegawai,p.nama,detail_izin.nik_atasan, detail_izin.tanggal_awal, detail_izin.tanggal_akhir, detail_izin.jam_awal, detail_izin.jam_akhir, detail_izin.alasan, k.nama as tempat_tujuan, detail_izin.uraian_tugas, detail_izin.tanggal_pengajuan, detail_izin.tanggal_respon, detail_izin.status FROM detail_izin LEFT JOIN jenis_izin j ON j.id = detail_izin.id_jenis_izin LEFT JOIN kantor k on k.id = detail_izin.id_kantor_tujuan LEFT JOIN pegawai p on p.nik = detail_izin.nik_pegawai WHERE detail_izin.status <> 0 ORDER BY detail_izin.tanggal_pengajuan DESC;";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
 
@@ -21,7 +21,7 @@ class DetailIzin{
     }
 
     public function getSingleData($id) {
-        $query = "SELECT detail_izin.id, detail_izin.id_jenis_izin, j.nama_izin as tipe_izin, detail_izin.nik_pegawai,detail_izin.nik_atasan, detail_izin.tanggal_awal, detail_izin.tanggal_akhir, detail_izin.jam_awal, detail_izin.jam_akhir, detail_izin.alasan, k.nama as tempat_tujuan, detail_izin.uraian_tugas, detail_izin.tanggal_pengajuan, detail_izin.tanggal_respon, detail_izin.status FROM detail_izin LEFT JOIN jenis_izin j ON j.id = detail_izin.id_jenis_izin LEFT JOIN kantor k on k.id = detail_izin.id_kantor_tujuan WHERE detail_izin.id = ? AND detail_izin.status <> 0 ORDER BY detail_izin.tanggal_pengajuan DESC;";
+        $query = "SELECT detail_izin.id, detail_izin.id_jenis_izin, j.nama_izin as tipe_izin, detail_izin.nik_pegawai,p.nama,detail_izin.nik_atasan, detail_izin.tanggal_awal, detail_izin.tanggal_akhir, detail_izin.jam_awal, detail_izin.jam_akhir, detail_izin.alasan, k.nama as tempat_tujuan, detail_izin.uraian_tugas, detail_izin.tanggal_pengajuan, detail_izin.tanggal_respon, detail_izin.status FROM detail_izin LEFT JOIN jenis_izin j ON j.id = detail_izin.id_jenis_izin LEFT JOIN kantor k on k.id = detail_izin.id_kantor_tujuan LEFT JOIN pegawai p on p.nik = detail_izin.nik_pegawai WHERE detail_izin.id = ? AND detail_izin.status <> 0 ORDER BY detail_izin.tanggal_pengajuan DESC;";
         $stmt = $this->conn->prepare($query);
         $stmt->execute([(int)$id]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -30,7 +30,7 @@ class DetailIzin{
     }
 
     public function getDataByNIKPegawai($nik_pegawai) {
-        $query = "SELECT detail_izin.id, detail_izin.id_jenis_izin, j.nama_izin as tipe_izin, detail_izin.nik_pegawai,detail_izin.nik_atasan, detail_izin.tanggal_awal, detail_izin.tanggal_akhir, detail_izin.jam_awal, detail_izin.jam_akhir, detail_izin.alasan, k.nama as tempat_tujuan, detail_izin.uraian_tugas, detail_izin.tanggal_pengajuan, detail_izin.tanggal_respon, detail_izin.status FROM detail_izin LEFT JOIN jenis_izin j ON j.id = detail_izin.id_jenis_izin LEFT JOIN kantor k on k.id = detail_izin.id_kantor_tujuan WHERE detail_izin.nik_pegawai = ? AND detail_izin.status <> 0 ORDER BY detail_izin.tanggal_pengajuan DESC;";
+        $query = "SELECT detail_izin.id, detail_izin.id_jenis_izin, j.nama_izin as tipe_izin, detail_izin.nik_pegawai,p.nama,detail_izin.nik_atasan, detail_izin.tanggal_awal, detail_izin.tanggal_akhir, detail_izin.jam_awal, detail_izin.jam_akhir, detail_izin.alasan, k.nama as tempat_tujuan, detail_izin.uraian_tugas, detail_izin.tanggal_pengajuan, detail_izin.tanggal_respon, detail_izin.status FROM detail_izin LEFT JOIN jenis_izin j ON j.id = detail_izin.id_jenis_izin LEFT JOIN kantor k on k.id = detail_izin.id_kantor_tujuan LEFT JOIN pegawai p on p.nik = detail_izin.nik_pegawai WHERE detail_izin.nik_pegawai = ? AND detail_izin.status <> 0 ORDER BY detail_izin.tanggal_pengajuan DESC;";
         $stmt = $this->conn->prepare($query);
         $stmt->execute([(int)$nik_pegawai]);
         $row = [];
@@ -40,7 +40,7 @@ class DetailIzin{
         return $row;
     }
     public function getDataByNIKAtasan($nik_atasan) {
-        $query = "SELECT detail_izin.id, detail_izin.id_jenis_izin, j.nama_izin as tipe_izin, detail_izin.nik_pegawai,detail_izin.nik_atasan, detail_izin.tanggal_awal, detail_izin.tanggal_akhir, detail_izin.jam_awal, detail_izin.jam_akhir, detail_izin.alasan, k.nama as tempat_tujuan, detail_izin.uraian_tugas, detail_izin.tanggal_pengajuan, detail_izin.tanggal_respon, detail_izin.status FROM detail_izin LEFT JOIN jenis_izin j ON j.id = detail_izin.id_jenis_izin LEFT JOIN kantor k on k.id = detail_izin.id_kantor_tujuan WHERE detail_izin.nik_atasan = ? AND detail_izin.status <> 0 ORDER BY detail_izin.tanggal_pengajuan DESC;";
+        $query = "SELECT detail_izin.id, detail_izin.id_jenis_izin, j.nama_izin as tipe_izin, detail_izin.nik_pegawai,p.nama,detail_izin.nik_atasan, detail_izin.tanggal_awal, detail_izin.tanggal_akhir, detail_izin.jam_awal, detail_izin.jam_akhir, detail_izin.alasan, k.nama as tempat_tujuan, detail_izin.uraian_tugas, detail_izin.tanggal_pengajuan, detail_izin.tanggal_respon, detail_izin.status FROM detail_izin LEFT JOIN jenis_izin j ON j.id = detail_izin.id_jenis_izin LEFT JOIN kantor k on k.id = detail_izin.id_kantor_tujuan LEFT JOIN pegawai p on p.nik = detail_izin.nik_pegawai WHERE detail_izin.nik_atasan = ? AND detail_izin.status <> 0 ORDER BY detail_izin.tanggal_pengajuan DESC;";
         $stmt = $this->conn->prepare($query);
         $stmt->execute([(int)$nik_atasan]);
         $row = [];
@@ -51,7 +51,7 @@ class DetailIzin{
     }
 
     public function getDataByJenisIzin($id_izin) {
-        $query = "SELECT detail_izin.id, detail_izin.id_jenis_izin, j.nama_izin as tipe_izin, detail_izin.nik_pegawai,detail_izin.nik_atasan, detail_izin.tanggal_awal, detail_izin.tanggal_akhir, detail_izin.jam_awal, detail_izin.jam_akhir, detail_izin.alasan, k.nama as tempat_tujuan, detail_izin.uraian_tugas, detail_izin.tanggal_pengajuan, detail_izin.tanggal_respon, detail_izin.status FROM detail_izin LEFT JOIN jenis_izin j ON j.id = detail_izin.id_jenis_izin LEFT JOIN kantor k on k.id = detail_izin.id_kantor_tujuan WHERE detail_izin.id_jenis_izin = ? AND detail_izin.status <> 0 ORDER BY detail_izin.tanggal_pengajuan DESC;";
+        $query = "SELECT detail_izin.id, detail_izin.id_jenis_izin, j.nama_izin as tipe_izin, detail_izin.nik_pegawai,p.nama,detail_izin.nik_atasan, detail_izin.tanggal_awal, detail_izin.tanggal_akhir, detail_izin.jam_awal, detail_izin.jam_akhir, detail_izin.alasan, k.nama as tempat_tujuan, detail_izin.uraian_tugas, detail_izin.tanggal_pengajuan, detail_izin.tanggal_respon, detail_izin.status FROM detail_izin LEFT JOIN jenis_izin j ON j.id = detail_izin.id_jenis_izin LEFT JOIN kantor k on k.id = detail_izin.id_kantor_tujuan LEFT JOIN pegawai p on p.nik = detail_izin.nik_pegawai WHERE detail_izin.id_jenis_izin = ? AND detail_izin.status <> 0 ORDER BY detail_izin.tanggal_pengajuan DESC;";
         $stmt = $this->conn->prepare($query);
         $stmt->execute([(int)$id_izin]);
         $row = [];
@@ -122,6 +122,29 @@ class DetailIzin{
             return false;
         }
     }
+
+    public function terimaIzin($id) {
+        $query = "UPDATE `$this->table` SET status = 2 WHERE id = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute([(int)$id]);
+        if ($stmt->rowCount() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function tolakIzin($id) {
+        $query = "UPDATE `$this->table` SET status = 3 WHERE id = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute([(int)$id]);
+        if ($stmt->rowCount() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public function deactivateData($id) {
         $query = "UPDATE `$this->table` SET status = 0 WHERE id = ?";
         $stmt = $this->conn->prepare($query);
