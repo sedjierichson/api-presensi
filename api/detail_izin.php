@@ -106,11 +106,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     );
 
     $data = json_decode(file_get_contents("php://input"));
-    if (isset($data->id) && isset($data->mode)){
+    if (isset($data->id) && isset($data->tanggal_respon) && isset($data->mode)){
         if($data->mode == "terima"){
-            $tmp = $detailizin->terimaIzin($data->id);
+            $tmp = $detailizin->terimaIzin($data->id,$data->tanggal_respon);
         } else if ($data->mode == "tolak"){
-            $tmp = $detailizin->tolakIzin($data->id);
+            $tmp = $detailizin->tolakIzin($data->id, $data->tanggal_respon);
         }
 
         if ($tmp) {

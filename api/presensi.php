@@ -93,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     }
 
     echo json_encode($result);
-}else if ($_SERVER['REQUEST_METHOD'] == 'PUT'){
+} else if ($_SERVER['REQUEST_METHOD'] == 'PUT'){
     $result = array(
         'status' => 0,
         'message' => ''
@@ -112,6 +112,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         } else {
             $result['status'] = 0;
             $result['message'] = "Jam keluar gagal diupdate";
+        }
+    } else {
+        $result['status'] = 0;
+        $result['message'] = "Pastikan parameter sudah terisi";
+    }
+
+    echo json_encode($result);
+} else if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
+    $result = array(
+        'status' => 0,
+        'message' => ''
+    );
+    $data = json_decode(file_get_contents("php://input"));
+    if (isset($data->id)) {
+        $tmp = $presensi->deactivateData($data->id);
+
+        if ($tmp) {
+            $result['status'] = 1;
+            $result['message'] = "Data berhasil dihapus";
+        } else {
+            $result['status'] = 0;
+            $result['message'] = "Data gagal dihapus";
         }
     } else {
         $result['status'] = 0;

@@ -123,10 +123,10 @@ class DetailIzin{
         }
     }
 
-    public function terimaIzin($id) {
-        $query = "UPDATE `$this->table` SET status = 2 WHERE id = ?";
+    public function terimaIzin($id, $tanggal_respon) {
+        $query = "UPDATE `$this->table` SET status = 2, tanggal_respon = ? WHERE id = ?";
         $stmt = $this->conn->prepare($query);
-        $stmt->execute([(int)$id]);
+        $stmt->execute([$tanggal_respon,(int)$id]);
         if ($stmt->rowCount() > 0) {
             return true;
         } else {
@@ -134,10 +134,10 @@ class DetailIzin{
         }
     }
 
-    public function tolakIzin($id) {
-        $query = "UPDATE `$this->table` SET status = 3 WHERE id = ?";
+    public function tolakIzin($id, $tanggal_respon) {
+        $query = "UPDATE `$this->table` SET status = 3, tanggal_respon = ? WHERE id = ?";
         $stmt = $this->conn->prepare($query);
-        $stmt->execute([(int)$id]);
+        $stmt->execute([$tanggal_respon,(int)$id]);
         if ($stmt->rowCount() > 0) {
             return true;
         } else {

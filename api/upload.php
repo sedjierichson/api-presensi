@@ -20,6 +20,8 @@ function uploadFile($file, $name, $directory) {
 
                 if (move_uploaded_file($tmpFileName, $directory.$newFileName)) {
                     $uploadedFileDir = 'http://127.0.0.1:8888/api-presensi/api-presensi/api/'.$directory.$newFileName;
+                    // $uploadedFileDir = 'http://192.168.0.102:8888/api-presensi/api-presensi/api/'.$directory.$newFileName;
+                    // $uploadedFileDir = 'http://172.20.10.4:8888/api-presensi/api-presensi/api/'.$directory.$newFileName;
                 } else {
                     $uploadStatus = 0;
                     $errorMsg = 'failed to move file';
