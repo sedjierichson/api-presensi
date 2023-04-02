@@ -57,6 +57,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     }
     echo json_encode($result);
 }
+else if ($_SERVER['REQUEST_METHOD'] == 'PUT'){
+    $result = array(
+        'status' => 0,
+        'message' => ''
+    );
+
+    $data = json_decode(file_get_contents("php://input"));
+    if (isset($data->id) && isset($data->nama) && isset($data->lokasi)){
+        $tmp = $beacon->updateBeacon($data->id, $data->nama, $data->lokasi);
+
+        if ($tmp) {
+            $result['status'] = 1;
+            $result['message'] = "Beacon berhasil diupdate";
+        } else {
+            $result['status'] = 0;
+            $result['message'] = "Beacon gagal diupdate";
+        }
+    } else {
+        $result['status'] = 0;
+        $result['message'] = "Pastikan parameter sudah terisi";
+    }
+    echo json_encode($result);
+}
+
 else if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
     $result = array(
         'status' => 0,

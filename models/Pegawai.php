@@ -8,7 +8,7 @@ class Pegawai{
         $this->conn = $db;
     }
     public function getAllData() {
-        $query = "SELECT * FROM `$this->table` ORDER BY pegawai.nik";
+        $query = "SELECT * FROM `$this->table` WHERE status <> 0 ORDER BY pegawai.nik";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
 
@@ -20,16 +20,14 @@ class Pegawai{
     }
 
     public function getCurrentUserData() {
-        $query = "SELECT * FROM `$this->table` WHERE (nik = ?) LIMIT 1";
+        $query = "SELECT * FROM `$this->table` WHERE (nik = ?) AND WHERE status <> 0 LIMIT 1";
         $stmt = $this->conn->prepare($query);
         $stmt->execute([$this->nik]);
-
-        
 
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
     public function insertUserBaru($nik, $security_code) {
-        $query = "INSERT INTO `$this->table` VALUES (DEFAULT, ?, NULL, NULL, ?, 0)";
+        $query = "INSERT INTO `$this->table` VALUES (DEFAULT, ?, NULL, NULL, ?, 0, 1)";
         $stmt = $this->conn->prepare($query);
         $stmt->execute([$nik, $security_code]);
 
@@ -58,6 +56,17 @@ class Pegawai{
         $query = "UPDATE `$this->table` SET imei = ? WHERE nik = ?";
         $stmt = $this->conn->prepare($query);
         $stmt->execute([$imei, (int)$nik]);
+        if ($stmt->rowCount() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function deactivateData($id) {
+        $query = "UPDATE `$this->table` SET status = 0 WHERE id = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute([(int)$id]);
         if ($stmt->rowCount() > 0) {
             return true;
         } else {

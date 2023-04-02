@@ -105,3 +105,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     }
     echo json_encode($result);
 }
+else if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
+    $result = array(
+        'status' => 0,
+        'message' => ''
+    );
+    $data = json_decode(file_get_contents("php://input"));
+    if (isset($data->id)) {
+        $tmp = $pegawai->deactivateData($data->id);
+
+        if ($tmp) {
+            $result['status'] = 1;
+            $result['message'] = "Data berhasil dihapus";
+        } else {
+            $result['status'] = 0;
+            $result['message'] = "Data gagal dihapus";
+        }
+    } else {
+        $result['status'] = 0;
+        $result['message'] = "Pastikan parameter sudah terisi";
+    }
+    echo json_encode($result);
+}
+else {
+    header("HTTP/1.1 400 Bad Request");
+    $error = array(
+        'error' => 'Method not Allowed'
+    );
+
+    echo json_encode($error);
+}

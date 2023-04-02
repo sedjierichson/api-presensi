@@ -44,6 +44,18 @@ class Beacon{
             return false;
         }
     }
+
+    public function updateBeacon($id, $nama, $lokasi) {
+        $query = "UPDATE `$this->table` SET nama = ?, lokasi = ? WHERE id = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute([$nama, $lokasi, (int)$id]);
+        if ($stmt->rowCount() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public function deactivateData($id) {
         $query = "UPDATE `$this->table` SET status = 0 WHERE id = ?";
         $stmt = $this->conn->prepare($query);
