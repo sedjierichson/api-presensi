@@ -14,7 +14,10 @@ $jamkerja = new JamKerja($db);
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     if (isset($_GET['id'])) {
         $res = $jamkerja->getSingleData($_GET['id']);
-    } else {
+    }else if (isset($_GET['hari'])) {
+        $res = $jamkerja->getSingleDataByHari($_GET['hari']);
+    }
+     else {
         $res = $jamkerja->getAllData();
     }
 

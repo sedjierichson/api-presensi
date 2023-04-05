@@ -8,7 +8,7 @@ class Presensi{
         $this->conn = $db;
     }
     public function getAllData() {
-        $query = "SELECT presensi_pegawai.id, presensi_pegawai.nik, pegawai.nama, presensi_pegawai.id_kantor, kantor.nama as lokasi, presensi_pegawai.tanggal, presensi_pegawai.jam_masuk, presensi_pegawai.jam_keluar, presensi_pegawai.foto, presensi_pegawai.status 
+        $query = "SELECT presensi_pegawai.id, presensi_pegawai.nik, pegawai.nama, presensi_pegawai.id_kantor, kantor.nama as lokasi, presensi_pegawai.tanggal, presensi_pegawai.jam_masuk, presensi_pegawai.jam_keluar, presensi_pegawai.foto, presensi_pegawai.kategori, presensi_pegawai.status 
         FROM `presensi_pegawai`
         LEFT JOIN pegawai ON pegawai.nik = presensi_pegawai.nik
         LEFT JOIN kantor on kantor.id = presensi_pegawai.id_kantor WHERE presensi_pegawai.status <> 0 ORDER BY presensi_pegawai.tanggal DESC;";
@@ -22,7 +22,7 @@ class Presensi{
         return $row;
     }
     public function getSingleData($id) {
-        $query = "SELECT presensi_pegawai.id, presensi_pegawai.nik, pegawai.nama, presensi_pegawai.id_kantor, kantor.nama as lokasi, presensi_pegawai.tanggal, presensi_pegawai.jam_masuk, presensi_pegawai.jam_keluar, presensi_pegawai.foto, presensi_pegawai.status 
+        $query = "SELECT presensi_pegawai.id, presensi_pegawai.nik, pegawai.nama, presensi_pegawai.id_kantor, kantor.nama as lokasi, presensi_pegawai.tanggal, presensi_pegawai.jam_masuk, presensi_pegawai.jam_keluar, presensi_pegawai.foto, presensi_pegawai.kategori, presensi_pegawai.status 
         FROM `presensi_pegawai`
         LEFT JOIN pegawai ON pegawai.nik = presensi_pegawai.nik
         LEFT JOIN kantor on kantor.id = presensi_pegawai.id_kantor WHERE presensi_pegawai.id = ? AND presensi_pegawai.status <> 0 ORDER BY presensi_pegawai.tanggal DESC;";
@@ -34,7 +34,7 @@ class Presensi{
     }
 
     public function getDataByNIKPegawai($nik) {
-        $query = "SELECT presensi_pegawai.id, presensi_pegawai.nik, pegawai.nama, presensi_pegawai.id_kantor, kantor.nama as lokasi, presensi_pegawai.tanggal, presensi_pegawai.jam_masuk, presensi_pegawai.jam_keluar, presensi_pegawai.foto, presensi_pegawai.status 
+        $query = "SELECT presensi_pegawai.id, presensi_pegawai.nik, pegawai.nama, presensi_pegawai.id_kantor, kantor.nama as lokasi, presensi_pegawai.tanggal, presensi_pegawai.jam_masuk, presensi_pegawai.jam_keluar, presensi_pegawai.foto, presensi_pegawai.kategori, presensi_pegawai.status 
         FROM `presensi_pegawai`
         LEFT JOIN pegawai ON pegawai.nik = presensi_pegawai.nik
         LEFT JOIN kantor on kantor.id = presensi_pegawai.id_kantor WHERE presensi_pegawai.nik = ? AND presensi_pegawai.status <> 0 ORDER BY presensi_pegawai.tanggal DESC;";
@@ -48,7 +48,7 @@ class Presensi{
     }
 
     public function getDataByIdKantor($id_kantor) {
-        $query = "SELECT presensi_pegawai.id, presensi_pegawai.nik, pegawai.nama, presensi_pegawai.id_kantor, kantor.nama as lokasi, presensi_pegawai.tanggal, presensi_pegawai.jam_masuk, presensi_pegawai.jam_keluar, presensi_pegawai.foto, presensi_pegawai.status 
+        $query = "SELECT presensi_pegawai.id, presensi_pegawai.nik, pegawai.nama, presensi_pegawai.id_kantor, kantor.nama as lokasi, presensi_pegawai.tanggal, presensi_pegawai.jam_masuk, presensi_pegawai.jam_keluar, presensi_pegawai.foto, presensi_pegawai.kategori, presensi_pegawai.status 
         FROM `presensi_pegawai`
         LEFT JOIN pegawai ON pegawai.nik = presensi_pegawai.nik
         LEFT JOIN kantor on kantor.id = presensi_pegawai.id_kantor WHERE presensi_pegawai.id_kantor = ? AND presensi_pegawai.status <> 0 ORDER BY presensi_pegawai.tanggal DESC;";
@@ -69,22 +69,6 @@ class Presensi{
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
         return $row;
-
-        // if ($stmt->rowCount() > 0) {
-        //     $row = $stmt->fetch(PDO::FETCH_ASSOC);
-            
-        //             return [
-        //                 'status' => 1,
-        //                 'message' => (int)$row['id']
-        //             ];
-              
-        // } else {
-        //     return [
-        //         'status' => 0,
-        //         'message' => 'Data Anda tidak ditemukan'
-        //     ];
-        // }
-        // return $stmt->fetch(PDO::FETCH_ASSOC);
     }
     public function getUserSudahAbsenLengkap() {
         $query = "SELECT * FROM presensi_pegawai WHERE nik = ? AND tanggal = ? AND jam_masuk <> 0 and jam_keluar <> 0 ORDER BY id DESC LIMIT 1;";
@@ -95,7 +79,7 @@ class Presensi{
         return $row;
     }
     public function getDataByNIKPegawaidanFilterTahunBulan() {
-        $query = "SELECT presensi_pegawai.id, presensi_pegawai.nik, presensi_pegawai.id_kantor, kantor.nama as lokasi, presensi_pegawai.tanggal, presensi_pegawai.jam_masuk, presensi_pegawai.jam_keluar, presensi_pegawai.foto, presensi_pegawai.status FROM `presensi_pegawai` LEFT JOIN kantor on kantor.id = presensi_pegawai.id_kantor WHERE YEAR(tanggal) = ? AND MONTH(tanggal) = ? AND nik = ? ORDER BY presensi_pegawai.tanggal DESC;";
+        $query = "SELECT presensi_pegawai.id, presensi_pegawai.nik, presensi_pegawai.id_kantor, kantor.nama as lokasi, presensi_pegawai.tanggal, presensi_pegawai.jam_masuk, presensi_pegawai.jam_keluar, presensi_pegawai.foto, presensi_pegawai.kategori, presensi_pegawai.status FROM `presensi_pegawai` LEFT JOIN kantor on kantor.id = presensi_pegawai.id_kantor WHERE YEAR(tanggal) = ? AND MONTH(tanggal) = ? AND nik = ? ORDER BY presensi_pegawai.tanggal DESC;";
         $stmt = $this->conn->prepare($query);
         $stmt->execute([$this->tahun, $this->bulan, $this->nikk]);
         $row = [];
@@ -105,10 +89,10 @@ class Presensi{
         return $row;
     }
 
-    public function insertPresensiMasukPegawai($nik, $id_kantor, $tanggal, $jam_masuk, $url){
-        $query = "INSERT INTO `$this->table` VALUES (DEFAULT, ?, ?, ?, ?, NULL, ?, 1)";
+    public function insertPresensiMasukPegawai($nik, $id_kantor, $tanggal, $jam_masuk, $url, $kategori){
+        $query = "INSERT INTO `$this->table` VALUES (DEFAULT, ?, ?, ?, ?, NULL, ?, ?, 1)";
         $stmt = $this->conn->prepare($query);
-        $stmt->execute([(int)$nik, (int)$id_kantor, $tanggal, $jam_masuk, $url]);
+        $stmt->execute([(int)$nik, (int)$id_kantor, $tanggal, $jam_masuk, $url, $kategori]);
 
         if ($stmt->rowCount() > 0) {
             $query_take = "SELECT * FROM `$this->table` ORDER BY id DESC LIMIT 1";
@@ -131,6 +115,18 @@ class Presensi{
             return false;
         }
     }
+
+    public function updateKategoriPresensi($id, $kategori){
+        $query = "UPDATE `$this->table` SET kategori = ? WHERE id = ? AND status <> 0";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute([$kategori,(int)$id]);
+        if ($stmt->rowCount() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public function deactivateData($id) {
         $query = "UPDATE `$this->table` SET status = 0 WHERE id = ?";
         $stmt = $this->conn->prepare($query);

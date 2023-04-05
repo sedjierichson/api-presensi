@@ -20,7 +20,7 @@ class Pegawai{
     }
 
     public function getCurrentUserData() {
-        $query = "SELECT * FROM `$this->table` WHERE (nik = ?) AND WHERE status <> 0 LIMIT 1";
+        $query = "SELECT * FROM `$this->table` WHERE (nik = ?) AND status <> 0 LIMIT 1";
         $stmt = $this->conn->prepare($query);
         $stmt->execute([$this->nik]);
 

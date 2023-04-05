@@ -27,6 +27,15 @@ class JamKerja{
         return $row;
     }
 
+    public function getSingleDataByHari($hari) {
+        $query = "SELECT * FROM `$this->table` WHERE hari = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute([$hari]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $row;
+    }
+
     public function updateJamKerja($id, $jamMasuk, $jamPulang) {
         $query = "UPDATE `$this->table` SET jam_masuk = ?, jam_pulang = ? WHERE id = ?";
         $stmt = $this->conn->prepare($query);
