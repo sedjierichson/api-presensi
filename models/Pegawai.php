@@ -26,10 +26,10 @@ class Pegawai{
 
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
-    public function insertUserBaru($nik, $security_code) {
-        $query = "INSERT INTO `$this->table` VALUES (DEFAULT, ?, NULL, NULL, ?, 0, 1)";
+    public function insertUserBaru($nik, $nama, $security_code) {
+        $query = "INSERT INTO `$this->table` VALUES (DEFAULT, ?, ?, NULL, ?, 0, 1)";
         $stmt = $this->conn->prepare($query);
-        $stmt->execute([$nik, $security_code]);
+        $stmt->execute([$nik, $nama, $security_code]);
 
         if ($stmt->rowCount() > 0) {
             $query_take = "SELECT * FROM `$this->table` ORDER BY id DESC LIMIT 1";

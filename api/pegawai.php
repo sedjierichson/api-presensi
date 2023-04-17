@@ -51,8 +51,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         'status' => 0,
         'message' => ''
     );
-    if (isset($_POST['nik']) && isset($_POST['security_code'])){
-        $tmp = $pegawai->insertUserBaru($_POST['nik'], $_POST['security_code']);
+    if (isset($_POST['nik']) && isset($_POST['nama']) && isset($_POST['security_code'])){
+        $tmp = $pegawai->insertUserBaru($_POST['nik'], $_POST['nama'], $_POST['security_code']);
         if ($tmp == false) {
             $result['status'] = 0;
             $result['message'] = "Data gagal diinput";
