@@ -26,19 +26,27 @@ class Pegawai{
 
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
-    public function insertUserBaru($nik, $nama, $security_code) {
-        $query = "INSERT INTO `$this->table` VALUES (DEFAULT, ?, ?, NULL, ?, 0, 1)";
+    public function insertUserBaru($nik, $nama, $security_code, $imei) {
+        $query = "SELECT * FROM `$this->table` WHERE (nik = ? OR imei = ?) AND status = 1";
         $stmt = $this->conn->prepare($query);
-        $stmt->execute([$nik, $nama, $security_code]);
+        $stmt->execute([$nik, $imei]);
 
         if ($stmt->rowCount() > 0) {
-            $query_take = "SELECT * FROM `$this->table` ORDER BY id DESC LIMIT 1";
-            $stmt = $this->conn->prepare($query_take);
-            $stmt->execute();
-            $row = $stmt->fetch(PDO::FETCH_ASSOC);
-            return $row['id'];
+            return -1;
         } else {
-            return false;
+            $query = "INSERT INTO `$this->table` VALUES (DEFAULT, ?, ?, ?, ?, 0, 1)";
+            $stmt = $this->conn->prepare($query);
+            $stmt->execute([$nik, $nama, $imei, $security_code]);
+
+            if ($stmt->rowCount() > 0) {
+                $query_take = "SELECT * FROM `$this->table` ORDER BY id DESC LIMIT 1";
+                $stmt = $this->conn->prepare($query_take);
+                $stmt->execute();
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                return $row['id'];
+            } else {
+                return false;
+            }
         }
     }
 
