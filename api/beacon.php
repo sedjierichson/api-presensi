@@ -14,7 +14,10 @@ $beacon = new Beacon($db);
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     if (isset($_GET['id'])) {
         $res = $beacon->getSingleData($_GET['id']);
-    } else {
+    } else if (isset($_GET['uuid'])){
+        $res = $beacon->getSingleDataByUUID($_GET['uuid']);
+    }
+    else {
         $res = $beacon->getAllData();
     }
 
@@ -26,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     } else {
         $result = array(
             'status' => 0,
-            'message' => 'Data Izin tidak ditemukan'
+            'message' => 'Data Beacon tidak ditemukan'
         );
     }
 

@@ -29,6 +29,15 @@ class Beacon{
         return $row;
     }
 
+    public function getSingleDataByUUID($uuid) {
+        $query = "SELECT beacon.id as id_beacon, beacon.id_kantor, k.nama as lokasi_kantor, beacon.uuid, beacon.nama, beacon.lokasi, beacon.status FROM beacon LEFT JOIN kantor k on k.id = beacon.id_kantor WHERE beacon.uuid = ? AND beacon.status <> 0;";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute([$uuid]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $row;
+    }
+
     public function insertBeacon($id_kantor, $uuid, $nama, $lokasi){
         $query = "INSERT INTO `$this->table` VALUES (DEFAULT, ?, ?, ?, ?, 1)";
         $stmt = $this->conn->prepare($query);
