@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         'message' => 'Test 1234'
     );
 
-    if(isset($_POST['nik']) && isset($_POST['id_kantor']) && isset($_POST['tanggal']) && isset($_POST['jam_masuk']) && isset($_POST['image']) && isset($_POST['img_name']) && isset($_POST['kategori'])){
+    if(isset($_POST['nik']) && isset($_POST['id_kantor']) && isset($_POST['tanggal']) && isset($_POST['jam_masuk']) && isset($_POST['image']) && isset($_POST['img_name']) && isset($_POST['kategori']) && isset($_POST['is_history'])){
         // $uploadResult = uploadFile($_FILES, 'foto', 'files/');
 
         $image = $_POST['image'];
@@ -71,7 +71,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         //     $result['message'] = $uploadResult['message'];
             
         // } else {
-            $tmp = $presensi->insertPresensiMasukPegawai($_POST['nik'], $_POST['id_kantor'], $_POST['tanggal'], $_POST['jam_masuk'], 'http://127.0.0.1:8888/api-presensi/api-presensi/api/files/'.$_POST['img_name'],  $_POST['kategori']);
+            if ($_POST['is_history'] == 1){
+                $tmp = $presensi->insertHistoryPresensiKeluar($_POST['nik'], $_POST['id_kantor'], $_POST['tanggal'], $_POST['jam_masuk'], 'http://127.0.0.1:8888/api-presensi/api-presensi/api/files/'.$_POST['img_name'],  $_POST['kategori'], $_POST['is_history']);
+            } else {
+
+                $tmp = $presensi->insertPresensiMasukPegawai($_POST['nik'], $_POST['id_kantor'], $_POST['tanggal'], $_POST['jam_masuk'], 'http://127.0.0.1:8888/api-presensi/api-presensi/api/files/'.$_POST['img_name'],  $_POST['kategori'], $_POST['is_history']);
+            }
+
             if ($tmp == false) {
                 $result['status'] = 0;
                 $result['message'] = "Data gagal diinput";
@@ -116,7 +122,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             $result['status'] = 0;
             $result['message'] = "Kategori gagal diupdate";
         }
+    } else if (isset($data->jam_kembali) && isset($data->nik) && isset($data->tanggal)){
+        $tmp = $presensi -> updateHistoryPresensiKembali($data->nik, $data->tanggal, $data->jam_kembali);
+        if ($tmp) {
+            $result['status'] = 1;
+            $result['message'] = "Jam kembali berhasil diupdate";
+        } else {
+            $result['status'] = 0;
+            $result['message'] = "Jam kembali gagal diupdate";
+        }
     }
+
     else {
         $result['status'] = 0;
         $result['message'] = "Pastikan parameter sudah terisi";
