@@ -105,10 +105,10 @@ class Presensi{
         }
     }
 
-    public function updatePresensiKeluar($id, $jam_keluar){
-        $query = "UPDATE `$this->table` SET jam_keluar = ? WHERE id = ? AND status <> 0";
+    public function updatePresensiKeluar($id, $jam_keluar, $nik){
+        $query = "UPDATE `$this->table` SET jam_keluar = ? WHERE id = ? AND status <> 0; DELETE FROM `$this->table` WHERE nik = ? and jam_masuk IS NULL";
         $stmt = $this->conn->prepare($query);
-        $stmt->execute([$jam_keluar,(int)$id]);
+        $stmt->execute([$jam_keluar,(int)$id, (int)$nik]);
         if ($stmt->rowCount() > 0) {
             return true;
         } else {

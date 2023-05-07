@@ -84,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             } else {
                 header("HTTP/1.1 201 Created");
                 $result['status'] = 1;
-                $result['message'] = "Berhasil absen masuk";
+                $result['message'] = $tmp;
             }
         // }
     }
@@ -102,8 +102,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
     $data = json_decode(file_get_contents("php://input"));
 
-    if (isset($data->id_presensi) && isset($data->jam_keluar)){
-        $tmp = $presensi->updatePresensiKeluar($data->id_presensi, $data->jam_keluar);
+    if (isset($data->id_presensi) && isset($data->jam_keluar) && isset($data->jam_keluar)){
+        $tmp = $presensi->updatePresensiKeluar($data->id_presensi, $data->jam_keluar, $data->nik);
 
         if ($tmp) {
             $result['status'] = 1;
