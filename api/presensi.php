@@ -16,6 +16,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     if (isset($_GET['id'])) {
         $res = $presensi->getSingleData($_GET['id']);
     } 
+    else if (isset($_GET['is_history'])) {
+        $res = $presensi->getAllDataByIsHistory($_GET['is_history']);
+    }
     else if (isset($_GET['nik'])) {
         $res = $presensi->getDataByNIKPegawai($_GET['nik']);
     }
