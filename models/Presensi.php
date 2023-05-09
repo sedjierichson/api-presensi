@@ -78,7 +78,7 @@ class Presensi{
     }
 
     public function getUserSudahAbsenMasuk() {
-        $query = "SELECT * FROM presensi_pegawai WHERE nik = ? AND tanggal = ? AND jam_masuk <> 0 AND is_history = 0 ORDER BY id DESC LIMIT 1;";
+        $query = "SELECT p.id, p.nik, p.id_kantor, p.tanggal, p.jam_masuk, p.jam_keluar, p.foto, p.kategori, p.is_history, p.status, TIMEDIFF(p.jam_keluar , p.jam_masuk) as jam_kerja FROM presensi_pegawai p WHERE nik = 1 AND tanggal = '2023-05-09' AND is_history = 0 ORDER BY id DESC LIMIT 1;";
         $stmt = $this->conn->prepare($query);
         $stmt->execute([$this->nik, $this->tanggal]);
         // return $this->nik;
