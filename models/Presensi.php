@@ -53,7 +53,7 @@ class Presensi{
         $query = "SELECT presensi_pegawai.id, presensi_pegawai.nik, pegawai.nama, presensi_pegawai.id_kantor, kantor.nama as lokasi, presensi_pegawai.tanggal, presensi_pegawai.jam_masuk, presensi_pegawai.jam_keluar, presensi_pegawai.foto, presensi_pegawai.kategori, presensi_pegawai.is_history, presensi_pegawai.status 
         FROM `presensi_pegawai`
         LEFT JOIN pegawai ON pegawai.nik = presensi_pegawai.nik
-        LEFT JOIN kantor on kantor.id = presensi_pegawai.id_kantor WHERE presensi_pegawai.nik = ? AND presensi_pegawai.status <> 0 ORDER BY presensi_pegawai.tanggal DESC;";
+        LEFT JOIN kantor on kantor.id = presensi_pegawai.id_kantor WHERE presensi_pegawai.nik = ? AND presensi_pegawai.is_history = 0 AND presensi_pegawai.status <> 0 ORDER BY presensi_pegawai.tanggal DESC;";
         $stmt = $this->conn->prepare($query);
         $stmt->execute([(int)$nik]);
         $row = [];
@@ -78,7 +78,7 @@ class Presensi{
     }
 
     public function getUserSudahAbsenMasuk() {
-        $query = "SELECT p.id, p.nik, p.id_kantor, p.tanggal, p.jam_masuk, p.jam_keluar, p.foto, p.kategori, p.is_history, p.status, TIMEDIFF(p.jam_keluar , p.jam_masuk) as jam_kerja FROM presensi_pegawai p WHERE nik = 1 AND tanggal = '2023-05-09' AND is_history = 0 ORDER BY id DESC LIMIT 1;";
+        $query = "SELECT p.id, p.nik, p.id_kantor, p.tanggal, p.jam_masuk, p.jam_keluar, p.foto, p.kategori, p.is_history, p.status, TIMEDIFF(p.jam_keluar , p.jam_masuk) as jam_kerja FROM presensi_pegawai p WHERE nik = ? AND tanggal = ? AND is_history = 0 ORDER BY id DESC LIMIT 1;";
         $stmt = $this->conn->prepare($query);
         $stmt->execute([$this->nik, $this->tanggal]);
         // return $this->nik;
