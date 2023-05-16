@@ -22,6 +22,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     else if (isset($_GET['nik'])) {
         $res = $presensi->getDataByNIKPegawai($_GET['nik']);
     }
+    else if (isset($_GET['nik_history']) && isset($_GET['tanggal_history'])) {
+        $res = $presensi->getHistoryByNIKTanggal($_GET['nik_history'], $_GET['tanggal_history']);
+    }
     else if (isset($_GET['id_kantor'])) {
         $res = $presensi->getDataByIdKantor($_GET['id_kantor']);
     } 

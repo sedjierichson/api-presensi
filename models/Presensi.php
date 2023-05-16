@@ -36,6 +36,20 @@ class Presensi{
 
         return $row;
     }
+    public function getHistoryByNIKTanggal($nik, $tanggal) {
+        $query = "SELECT presensi_pegawai.id, presensi_pegawai.nik, pegawai.nama, presensi_pegawai.id_kantor, kantor.nama as lokasi, presensi_pegawai.tanggal, presensi_pegawai.jam_masuk, presensi_pegawai.jam_keluar, presensi_pegawai.foto, presensi_pegawai.kategori, presensi_pegawai.is_history, presensi_pegawai.status 
+        FROM `presensi_pegawai`
+        LEFT JOIN pegawai ON pegawai.nik = presensi_pegawai.nik
+        LEFT JOIN kantor on kantor.id = presensi_pegawai.id_kantor WHERE presensi_pegawai.nik = ? AND presensi_pegawai.tanggal = ? AND presensi_pegawai.is_history = 1 AND presensi_pegawai.status <> 0 ORDER BY presensi_pegawai.tanggal DESC;";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute([(int)$nik, $tanggal]);
+
+        $row = [];
+        while($data = $stmt->fetch(PDO::FETCH_OBJ))
+            $row[] = $data;
+
+        return $row;
+    }
 
     public function getSingleData($id) {
         $query = "SELECT presensi_pegawai.id, presensi_pegawai.nik, pegawai.nama, presensi_pegawai.id_kantor, kantor.nama as lokasi, presensi_pegawai.tanggal, presensi_pegawai.jam_masuk, presensi_pegawai.jam_keluar, presensi_pegawai.foto, presensi_pegawai.kategori, presensi_pegawai.is_history, presensi_pegawai.status 
