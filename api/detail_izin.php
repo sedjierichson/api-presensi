@@ -62,6 +62,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             $result['status'] = 1;
             $result['message'] = $tmp;
         }
+
+        $fcm = new FcmDeviceId($db);
+            
+        $title = "Ada Pengajuan Izin Baru";
+        $body = "Segera cek!";
+        $icon = "";
+        $url = "";
+        $deviceId = $fcm->getDataByIzin($result['message']);
+
+        if ($deviceId->rowCount() > 0) {
+            while ($row = $deviceId->fetch(PDO::FETCH_ASSOC)) {
+                sendPush($row['keyClient'], $title, $body, $icon, $url);
+            }
+        }
     } else if (isset($_POST['nik_pegawai']) && isset($_POST['nik_atasan']) && isset($_POST['tanggal_izin']) && isset($_POST['jam_awal']) && isset($_POST['jam_akhir']) &&isset($_POST['alasan']) && isset($_POST['tanggal_pengajuan'])){
         $tmp = $detailizin->insertIzinMeninggalkanKantor($_POST['nik_pegawai'], $_POST['nik_atasan'], $_POST['tanggal_izin'], $_POST['jam_awal'], $_POST['jam_akhir'], $_POST['alasan'], $_POST['tanggal_pengajuan']);
         if ($tmp == false) {
