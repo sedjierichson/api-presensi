@@ -34,3 +34,10 @@ function sendPush($to, $title, $body, $icon, $url) {
 		return json_decode($result);
 	} else return false;
 }
+
+$keyclient = "cH7Xc5X0R9SIPatj7_wo-Z:APA91bEmAq7FBusCbKmpCvk7M5arDoU7T7VQCfbm7r0NszOZXEexNFBGGpD0spjIGXm5tTo-E5odBB8Rz4_q5Zx6FE1VqB6vcvGCbPabz4WB4pVMXnNPnKir7uOS4au7wmAkWoSUHs-E";
+$title = "Ada Pengajuan Izin Baru";
+$body = "Segera cek!";
+$icon = "";
+$url = "";
+sendPush($keyclient, $title, $body, $icon, $url);

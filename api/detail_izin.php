@@ -61,21 +61,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             header("HTTP/1.1 201 Created");
             $result['status'] = 1;
             $result['message'] = $tmp;
+
+            // $fcm = new FcmDeviceId($db);
+            $keyclient = "cH7Xc5X0R9SIPatj7_wo-Z:APA91bEmAq7FBusCbKmpCvk7M5arDoU7T7VQCfbm7r0NszOZXEexNFBGGpD0spjIGXm5tTo-E5odBB8Rz4_q5Zx6FE1VqB6vcvGCbPabz4WB4pVMXnNPnKir7uOS4au7wmAkWoSUHs-E";
+            $title = "Ada Pengajuan Izin Baru";
+            $body = "Segera cek!";
+            $icon = "";
+            $url = "";
+            // $deviceId = $fcm->getDataByIzin($result['message']);
+
+            // if ($deviceId->rowCount() > 0) {
+            //     while ($row = $deviceId->fetch(PDO::FETCH_ASSOC)) {
+            //         sendPush($row['keyClient'], $title, $body, $icon, $url);
+            //     }
+            // }
+            sendPush($keyclient, $title, $body, $icon, $url);
         }
 
-        $fcm = new FcmDeviceId($db);
-            
-        $title = "Ada Pengajuan Izin Baru";
-        $body = "Segera cek!";
-        $icon = "";
-        $url = "";
-        $deviceId = $fcm->getDataByIzin($result['message']);
-
-        if ($deviceId->rowCount() > 0) {
-            while ($row = $deviceId->fetch(PDO::FETCH_ASSOC)) {
-                sendPush($row['keyClient'], $title, $body, $icon, $url);
-            }
-        }
+        
     } else if (isset($_POST['nik_pegawai']) && isset($_POST['nik_atasan']) && isset($_POST['tanggal_izin']) && isset($_POST['jam_awal']) && isset($_POST['jam_akhir']) &&isset($_POST['alasan']) && isset($_POST['tanggal_pengajuan'])){
         $tmp = $detailizin->insertIzinMeninggalkanKantor($_POST['nik_pegawai'], $_POST['nik_atasan'], $_POST['tanggal_izin'], $_POST['jam_awal'], $_POST['jam_akhir'], $_POST['alasan'], $_POST['tanggal_pengajuan']);
         if ($tmp == false) {
@@ -85,6 +88,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             header("HTTP/1.1 201 Created");
             $result['status'] = 1;
             $result['message'] = $tmp;
+
+            // $fcm = new FcmDeviceId($db);
+            
+            $title = "Ada Pengajuan Izin Baru";
+            $body = "Segera cek!";
+            $icon = "";
+            $url = "";
+            // $deviceId = $fcm->getDataByIzin($result['message']);
+
+            // if ($deviceId->rowCount() > 0) {
+            //     while ($row = $deviceId->fetch(PDO::FETCH_ASSOC)) {
+            //         sendPush($row['keyClient'], $title, $body, $icon, $url);
+            //     }
+            // }
+            sendPush("cH7Xc5X0R9SIPatj7_wo-Z:APA91bEmAq7FBusCbKmpCvk7M5arDoU7T7VQCfbm7r0NszOZXEexNFBGGpD0spjIGXm5tTo-E5odBB8Rz4_q5Zx6FE1VqB6vcvGCbPabz4WB4pVMXnNPnKir7uOS4au7wmAkWoSUHs-E", $title, $body, $icon, $url);
         }
     } else if (isset($_POST['nik_pegawai']) && isset($_POST['nik_atasan']) && isset($_POST['tanggal_awal']) && isset($_POST['tanggal_akhir']) && isset($_POST['uraian_tugas']) && isset($_POST['tempat_tujuan']) && isset($_POST['tanggal_pengajuan'])){
         $tmp = $detailizin->insertIzinSuratTugas($_POST['nik_pegawai'], $_POST['nik_atasan'], $_POST['tanggal_awal'], $_POST['tanggal_akhir'], $_POST['uraian_tugas'], $_POST['tempat_tujuan'], $_POST['tanggal_pengajuan']);
@@ -95,6 +113,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             header("HTTP/1.1 201 Created");
             $result['status'] = 1;
             $result['message'] = $tmp;
+
+            // $fcm = new FcmDeviceId($db);
+            
+            $title = "Ada Pengajuan Izin Baru";
+            $body = "Segera cek!";
+            $icon = "";
+            $url = "";
+            // $deviceId = $fcm->getDataByIzin($result['message']);
+
+            // if ($deviceId->rowCount() > 0) {
+            //     while ($row = $deviceId->fetch(PDO::FETCH_ASSOC)) {
+            //         sendPush($row['keyClient'], $title, $body, $icon, $url);
+            //     }
+            // }
+            sendPush("cH7Xc5X0R9SIPatj7_wo-Z:APA91bEmAq7FBusCbKmpCvk7M5arDoU7T7VQCfbm7r0NszOZXEexNFBGGpD0spjIGXm5tTo-E5odBB8Rz4_q5Zx6FE1VqB6vcvGCbPabz4WB4pVMXnNPnKir7uOS4au7wmAkWoSUHs-E", $title, $body, $icon, $url);
         }
     } else if (isset($_POST['nik_pegawai']) && isset($_POST['nik_atasan']) && isset($_POST['tanggal_lupa_absen']) && isset($_POST['jam_awal']) && isset($_POST['jam_akhir']) &&isset($_POST['alasan']) && isset($_POST['tanggal_pengajuan'])){
         $tmp = $detailizin->insertIzinLupaAbsen($_POST['nik_pegawai'], $_POST['nik_atasan'], $_POST['tanggal_lupa_absen'], $_POST['jam_awal'], $_POST['jam_akhir'], $_POST['alasan'], $_POST['tanggal_pengajuan']);
@@ -105,6 +138,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             header("HTTP/1.1 201 Created");
             $result['status'] = 1;
             $result['message'] = $tmp;
+
+            // $fcm = new FcmDeviceId($db);
+            
+            $title = "Ada Pengajuan Izin Baru";
+            $body = "Segera cek!";
+            $icon = "";
+            $url = "";
+            // $deviceId = $fcm->getDataByIzin($result['message']);
+
+            // if ($deviceId->rowCount() > 0) {
+            //     while ($row = $deviceId->fetch(PDO::FETCH_ASSOC)) {
+            //         sendPush($row['keyClient'], $title, $body, $icon, $url);
+            //     }
+            // }
+            sendPush("cH7Xc5X0R9SIPatj7_wo-Z:APA91bEmAq7FBusCbKmpCvk7M5arDoU7T7VQCfbm7r0NszOZXEexNFBGGpD0spjIGXm5tTo-E5odBB8Rz4_q5Zx6FE1VqB6vcvGCbPabz4WB4pVMXnNPnKir7uOS4au7wmAkWoSUHs-E", $title, $body, $icon, $url);
         }
     }
     else {
