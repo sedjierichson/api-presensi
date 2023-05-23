@@ -35,9 +35,9 @@ function sendPush($to, $title, $body, $icon, $url) {
 	} else return false;
 }
 
-$keyclient = "cH7Xc5X0R9SIPatj7_wo-Z:APA91bEmAq7FBusCbKmpCvk7M5arDoU7T7VQCfbm7r0NszOZXEexNFBGGpD0spjIGXm5tTo-E5odBB8Rz4_q5Zx6FE1VqB6vcvGCbPabz4WB4pVMXnNPnKir7uOS4au7wmAkWoSUHs-E";
-$title = "Ada Pengajuan Izin Baru";
-$body = "Segera cek!";
-$icon = "";
-$url = "";
-sendPush($keyclient, $title, $body, $icon, $url);
+// $keyclient = "cMhqsmH_SViHHgjtRna2Cl:APA91bFKaYvbZCH6qBugwhaNnnK6fpnRz6AOzZ0YN_OpWqQH12X9P7xw90T24eG3LK2OakDrgi9Fs-7H0a4KgympaxPLwKCvn1f2YzDZ8eGgR3Zq8A91WHuoOVkZBq0ppTC4zR94WkPk";
+// $title = "Ada Pengajuan Izin Baru";
+// $body = "Segera cek!";
+// $icon = "";
+// $url = "";
+// sendPush($keyclient, $title, $body, $icon, $url);
