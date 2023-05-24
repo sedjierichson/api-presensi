@@ -23,10 +23,7 @@ class Presensi{
     }
 
     public function getAllDataByIsHistory($ishistory) {
-        $query = "SELECT presensi_pegawai.id, presensi_pegawai.nik, pegawai.nama, presensi_pegawai.id_kantor, kantor.nama as lokasi, presensi_pegawai.tanggal, presensi_pegawai.jam_masuk, presensi_pegawai.jam_keluar, presensi_pegawai.foto, presensi_pegawai.kategori, presensi_pegawai.is_history, presensi_pegawai.status 
-        FROM `presensi_pegawai`
-        LEFT JOIN pegawai ON pegawai.nik = presensi_pegawai.nik
-        LEFT JOIN kantor on kantor.id = presensi_pegawai.id_kantor WHERE presensi_pegawai.is_history = ? AND presensi_pegawai.status <> 0 ORDER BY presensi_pegawai.tanggal DESC;";
+        $query = "SELECT presensi_pegawai.id, presensi_pegawai.nik, pegawai.nama, presensi_pegawai.id_kantor, kantor.nama as lokasi, presensi_pegawai.tanggal, presensi_pegawai.jam_masuk, presensi_pegawai.jam_keluar, TIMEDIFF(presensi_pegawai.jam_masuk , presensi_pegawai.jam_keluar) as durasi, presensi_pegawai.foto, presensi_pegawai.kategori, presensi_pegawai.is_history, presensi_pegawai.status FROM `presensi_pegawai` LEFT JOIN pegawai ON pegawai.nik = presensi_pegawai.nik LEFT JOIN kantor on kantor.id = presensi_pegawai.id_kantor WHERE presensi_pegawai.is_history = ? AND presensi_pegawai.status <> 0 ORDER BY presensi_pegawai.tanggal DESC;";
         $stmt = $this->conn->prepare($query);
         $stmt->execute([(int)$ishistory]);
 
