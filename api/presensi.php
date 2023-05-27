@@ -47,9 +47,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     if ($res) {
         $result = array(
             'status' => 1,
-            'data' => $res
+            'data' => $res,
         );
-    } else {
+    }
+    else {
         $result = array(
             'status' => 0,
             'message' => 'Data presensi tidak ditemukan'
