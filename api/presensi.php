@@ -78,22 +78,38 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         //     $result['message'] = $uploadResult['message'];
             
         // } else {
-            if ($_POST['is_history'] == 1){
-                $tmp = $presensi->insertHistoryPresensiKeluar($_POST['nik'], $_POST['id_kantor'], $_POST['tanggal'], $_POST['jam_masuk'], 'http://127.0.0.1:8888/api-presensi/api-presensi/api/files/'.$_POST['img_name'],  $_POST['kategori'], $_POST['is_history']);
-            } else {
+        if ($_POST['is_history'] == 1){
+            $tmp = $presensi->insertHistoryPresensiKeluar($_POST['nik'], $_POST['id_kantor'], $_POST['tanggal'], $_POST['jam_masuk'], 'http://127.0.0.1:8888/api-presensi/api-presensi/api/files/'.$_POST['img_name'],  $_POST['kategori'], $_POST['is_history']);
+        } else {
 
-                $tmp = $presensi->insertPresensiMasukPegawai($_POST['nik'], $_POST['id_kantor'], $_POST['tanggal'], $_POST['jam_masuk'], 'http://127.0.0.1:8888/api-presensi/api-presensi/api/files/'.$_POST['img_name'],  $_POST['kategori'], $_POST['is_history']);
-            }
+            $tmp = $presensi->insertPresensiMasukPegawai($_POST['nik'], $_POST['id_kantor'], $_POST['tanggal'], $_POST['jam_masuk'], 'http://127.0.0.1:8888/api-presensi/api-presensi/api/files/'.$_POST['img_name'],  $_POST['kategori'], $_POST['is_history']);
+        }
 
-            if ($tmp == false) {
-                $result['status'] = 0;
-                $result['message'] = "Data gagal diinput";
-            } else {
-                header("HTTP/1.1 201 Created");
-                $result['status'] = 1;
-                $result['message'] = $tmp;
-            }
+        if ($tmp == false) {
+            $result['status'] = 0;
+            $result['message'] = "Data gagal diinput";
+        } else {
+            header("HTTP/1.1 201 Created");
+            $result['status'] = 1;
+            $result['message'] = $tmp;
+        }
         // }
+    } if(isset($_POST['nik']) && isset($_POST['id_kantor']) && isset($_POST['tanggal']) && isset($_POST['jam_masuk']) && isset($_POST['jam_keluar']) && isset($_POST['image']) && isset($_POST['img_name']) && isset($_POST['kategori']) && isset($_POST['is_history'])){
+        $image = $_POST['image'];
+        $name = $_POST['img_name'];
+        $realImage = base64_decode($image);
+
+        file_put_contents('files/'.$name, $realImage);
+
+        $tmp = $presensi->insertPresensiMasukPegawaiByAdmin($_POST['nik'], $_POST['id_kantor'], $_POST['tanggal'], $_POST['jam_masuk'],$_POST['jam_keluar'], 'http://127.0.0.1:8888/api-presensi/api-presensi/api/files/'.$_POST['img_name'],  $_POST['kategori'], $_POST['is_history']);
+        if ($tmp == false) {
+            $result['status'] = 0;
+            $result['message'] = "Data gagal diinput";
+        } else {
+            header("HTTP/1.1 201 Created");
+            $result['status'] = 1;
+            $result['message'] = $tmp;
+        }
     }
     else {
         $result['status'] = 0;

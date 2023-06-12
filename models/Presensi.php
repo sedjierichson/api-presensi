@@ -132,6 +132,22 @@ class Presensi{
         }
     }
 
+    public function insertPresensiMasukPegawaiByAdmin($nik, $id_kantor, $tanggal, $jam_masuk, $jam_keluar, $url, $kategori, $is_history){
+        $query = "INSERT INTO `$this->table` VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, 1)";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute([(int)$nik, (int)$id_kantor, $tanggal, $jam_masuk, $jam_keluar,$url, $kategori, (int)$is_history]);
+
+        if ($stmt->rowCount() > 0) {
+            $query_take = "SELECT * FROM `$this->table` ORDER BY id DESC LIMIT 1";
+            $stmt = $this->conn->prepare($query_take);
+            $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $row['id'];
+        } else {
+            return false;
+        }
+    }
+
     public function updatePresensiKeluar($id, $jam_keluar, $nik){
         $query = "UPDATE `$this->table` SET jam_keluar = ? WHERE id = ? AND status <> 0; DELETE FROM `$this->table` WHERE nik = ? and jam_masuk IS NULL";
         $stmt = $this->conn->prepare($query);
