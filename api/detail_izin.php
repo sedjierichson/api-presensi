@@ -7,6 +7,7 @@ require "../Database.php";
 require "../models/DetailIzin.php";
 require "send-notifications.php";
 require "../models/FcmDeviceId.php";
+require "../models/Presensi.php";
 
 $database = new Database();
 $db = $database->connect();
@@ -158,17 +159,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 } else if ($_SERVER['REQUEST_METHOD'] == 'PUT'){
     $result = array(
         'status' => 0,
-        'message' => ''
+        'message' => '',
+        'message2' => ''
     );
 
     $data = json_decode(file_get_contents("php://input"));
     if (isset($data->id) && isset($data->tanggal_respon) && isset($data->mode)){
         if($data->mode == "terima"){
             $tmp = $detailizin->terimaIzin($data->id,$data->tanggal_respon);
+            if ($data->id_jenis_izin == "4"){
+                $presensi = new Presensi($db);
+                $tmp2 = $presensi->insertPresensiMasukPegawaiByAdmin($data->nik, $data->id_kantor, $data->tanggal, $data->jam_masuk, $data->jam_keluar, 'http://127.0.0.1:8888/api-presensi/api-presensi/api/files/'.$data->img_name,  $data->kategori, $data->is_history);
+                if ($tmp2){
+                    $result['message2'] = 'Berhasil';
+                } else {
+                    $result['message2'] = 'Gagal';
+                }
+            }
         } else if ($data->mode == "tolak"){
             $tmp = $detailizin->tolakIzin($data->id, $data->tanggal_respon);
         }
-
+        
         if ($tmp) {
             $result['status'] = 1;
             $result['message'] = "Status izin berhasil diupdate";

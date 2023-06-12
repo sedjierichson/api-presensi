@@ -94,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             $result['message'] = $tmp;
         }
         // }
-    } if(isset($_POST['nik']) && isset($_POST['id_kantor']) && isset($_POST['tanggal']) && isset($_POST['jam_masuk']) && isset($_POST['jam_keluar']) && isset($_POST['image']) && isset($_POST['img_name']) && isset($_POST['kategori']) && isset($_POST['is_history'])){
+    } else if(isset($_POST['nik']) && isset($_POST['id_kantor']) && isset($_POST['tanggal']) && isset($_POST['jam_masuk']) && isset($_POST['jam_keluar']) && isset($_POST['image']) && isset($_POST['img_name']) && isset($_POST['kategori']) && isset($_POST['is_history'])){
         $image = $_POST['image'];
         $name = $_POST['img_name'];
         $realImage = base64_decode($image);
