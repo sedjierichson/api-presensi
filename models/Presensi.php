@@ -112,6 +112,24 @@ class Presensi{
 
         return $row;
     }
+    public function getPresensiByNikAtasan($nik_atasan) {
+        // $query = "SELECT DISTINCT presensi_pegawai.nik, pegawai.nama, detail_izin.nik_atasan, presensi_pegawai.kategori, presensi_pegawai.tanggal 
+        // FROM `presensi_pegawai`
+        // left JOIN detail_izin on detail_izin.nik_pegawai=presensi_pegawai.nik 
+        // LEFT JOIN pegawai on pegawai.nik = presensi_pegawai.nik
+        // WHERE presensi_pegawai.is_history = 0 AND detail_izin.nik_atasan = ?;";
+        $query = "SELECT nik, kategori, count(kategori) as jumlah
+        FROM presensi_pegawai
+        WHERE is_history = 0 and month(tanggal) = 5
+        GROUP BY kategori, nik;";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute([(int)$nik_atasan]);
+        $row = [];
+        while($data = $stmt->fetch(PDO::FETCH_OBJ))
+            $row[] = $data;
+
+        return $row;
+    }
 
     public function getUserSudahAbsenMasuk() {
         $query = "SELECT p.id, p.nik, p.id_kantor, p.tanggal, p.jam_masuk, p.jam_keluar, p.foto, p.kategori, p.is_history, p.status, TIMEDIFF(p.jam_keluar , p.jam_masuk) as jam_kerja FROM presensi_pegawai p WHERE nik = ? AND tanggal = ? AND is_history = 0 ORDER BY id DESC LIMIT 1;";

@@ -22,9 +22,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     else if (isset($_GET['nik'])) {
         $res = $presensi->getDataByNIKPegawai($_GET['nik']);
     }
+    else if (isset($_GET['nik_atasan'])) {
+        $res = $presensi->getPresensiByNikAtasan($_GET['nik_atasan']);
+    }
     else if (isset($_GET['nik_history']) && isset($_GET['tanggal_history'])) {
         $res = $presensi->getHistoryByNIKTanggal($_GET['nik_history'], $_GET['tanggal_history']);
-        $res2 = $presensi->getDataAbsenByNIKTanggal($_GET['nik_history'], $_GET['tanggal_history']);
+        // $res2 = $presensi->getDataAbsenByNIKTanggal($_GET['nik_history'], $_GET['tanggal_history']);
     }
     else if (isset($_GET['id_kantor'])) {
         $res = $presensi->getDataByIdKantor($_GET['id_kantor']);
@@ -49,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $result = array(
             'status' => 1,
             'data' => $res,
-            'data2'=>$res2
+            // 'data2'=>$res2
         );
     }
     else {
