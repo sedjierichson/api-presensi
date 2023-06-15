@@ -112,7 +112,7 @@ class Presensi{
 
         return $row;
     }
-    public function getPresensiByNikAtasan($nik_atasan) {
+    public function getPresensiByNikAtasan($nik_atasan, $bulan, $tahun) {
         // $query = "SELECT DISTINCT presensi_pegawai.nik, pegawai.nama, detail_izin.nik_atasan, presensi_pegawai.kategori, presensi_pegawai.tanggal 
         // FROM `presensi_pegawai`
         // left JOIN detail_izin on detail_izin.nik_pegawai=presensi_pegawai.nik 
@@ -120,10 +120,11 @@ class Presensi{
         // WHERE presensi_pegawai.is_history = 0 AND detail_izin.nik_atasan = ?;";
         $query = "SELECT nik, kategori, count(kategori) as jumlah
         FROM presensi_pegawai
-        WHERE is_history = 0 and month(tanggal) = 5
-        GROUP BY kategori, nik;";
+        WHERE is_history = 0 and month(tanggal) = $bulan and year(tanggal) = $tahun
+        GROUP BY kategori, nik
+        ORDER BY nik, kategori;";
         $stmt = $this->conn->prepare($query);
-        $stmt->execute([(int)$nik_atasan]);
+        $stmt->execute([(int)$nik_atasan, $bulan, $tahun]);
         $row = [];
         while($data = $stmt->fetch(PDO::FETCH_OBJ))
             $row[] = $data;
