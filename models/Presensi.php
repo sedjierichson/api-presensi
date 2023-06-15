@@ -29,7 +29,7 @@ class Presensi{
         LEFT JOIN kantor on kantor.id = presensi_pegawai.id_kantor 
         INNER JOIN presensi_pegawai as presensi_pegawai2
         on presensi_pegawai2.tanggal = presensi_pegawai.tanggal
-        WHERE presensi_pegawai.is_history = 1 AND presensi_pegawai.status <> 0 AND presensi_pegawai2.is_history = 0
+        WHERE presensi_pegawai.is_history = $ishistory AND presensi_pegawai.status <> 0 AND presensi_pegawai2.is_history = 0
         ORDER BY presensi_pegawai.tanggal DESC;;";
         $stmt = $this->conn->prepare($query);
         $stmt->execute([(int)$ishistory]);
