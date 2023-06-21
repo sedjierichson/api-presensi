@@ -11,7 +11,7 @@ class Presensi{
         $query = "SELECT presensi_pegawai.id, presensi_pegawai.nik, pegawai.nama, presensi_pegawai.id_kantor, kantor.nama as lokasi, presensi_pegawai.tanggal, presensi_pegawai.jam_masuk, presensi_pegawai.jam_keluar, presensi_pegawai.foto, presensi_pegawai.kategori, presensi_pegawai.is_history, presensi_pegawai.status 
         FROM `presensi_pegawai`
         LEFT JOIN pegawai ON pegawai.nik = presensi_pegawai.nik
-        LEFT JOIN kantor on kantor.id = presensi_pegawai.id_kantor WHERE presensi_pegawai.status <> 0 ORDER BY presensi_pegawai.tanggal DESC;";
+        LEFT JOIN kantor on kantor.id = presensi_pegawai.id_kantor WHERE presensi_pegawai.status <> 0 AND presensi_pegawai.is_history = 0 ORDER BY presensi_pegawai.tanggal DESC;";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
 
