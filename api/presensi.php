@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set('Asia/Jakarta');
 error_reporting(E_ERROR | E_PARSE);
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
@@ -84,10 +85,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             
         // } else {
         if ($_POST['is_history'] == 1){
-            $tmp = $presensi->insertHistoryPresensiKeluar($_POST['nik'], $_POST['id_kantor'], $_POST['tanggal'], $_POST['jam_masuk'], 'http://127.0.0.1:8888/api-presensi/api-presensi/api/files/'.$_POST['img_name'],  $_POST['kategori'], $_POST['is_history']);
+            // $tmp = $presensi->insertHistoryPresensiKeluar($_POST['nik'], $_POST['id_kantor'], $_POST['tanggal'], $_POST['jam_masuk'], 'http://127.0.0.1:8888/api-presensi/api-presensi/api/files/'.$_POST['img_name'],  $_POST['kategori'], $_POST['is_history']);
+            $tmp = $presensi->insertHistoryPresensiKeluar($_POST['nik'], $_POST['id_kantor'], $_POST['tanggal'], date("H:i:s"), 'http://127.0.0.1:8888/api-presensi/api-presensi/api/files/'.$_POST['img_name'],  $_POST['kategori'], $_POST['is_history']);
         } else {
-
-            $tmp = $presensi->insertPresensiMasukPegawai($_POST['nik'], $_POST['id_kantor'], $_POST['tanggal'], $_POST['jam_masuk'], 'http://127.0.0.1:8888/api-presensi/api-presensi/api/files/'.$_POST['img_name'],  $_POST['kategori'], $_POST['is_history']);
+            // $tmp = $presensi->insertPresensiMasukPegawai($_POST['nik'], $_POST['id_kantor'], $_POST['tanggal'], $_POST['jam_masuk'], 'http://127.0.0.1:8888/api-presensi/api-presensi/api/files/'.$_POST['img_name'],  $_POST['kategori'], $_POST['is_history']);
+            $tmp = $presensi->insertPresensiMasukPegawai($_POST['nik'], $_POST['id_kantor'], $_POST['tanggal'], date("H:i:s"), 'http://127.0.0.1:8888/api-presensi/api-presensi/api/files/'.$_POST['img_name'],  $_POST['kategori'], $_POST['is_history']);
         }
 
         if ($tmp == false) {
@@ -131,7 +133,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $data = json_decode(file_get_contents("php://input"));
 
     if (isset($data->id_presensi) && isset($data->jam_keluar) && isset($data->jam_keluar)){
-        $tmp = $presensi->updatePresensiKeluar($data->id_presensi, $data->jam_keluar, $data->nik);
+        // $tmp = $presensi->updatePresensiKeluar($data->id_presensi, $data->jam_keluar, $data->nik);
+        $tmp = $presensi->updatePresensiKeluar($data->id_presensi, date("H:i:s"), $data->nik);
 
         if ($tmp) {
             $result['status'] = 1;
@@ -151,7 +154,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             $result['message'] = "Kategori gagal diupdate";
         }
     } else if (isset($data->jam_kembali) && isset($data->nik) && isset($data->tanggal)){
-        $tmp = $presensi -> updateHistoryPresensiKembali($data->nik, $data->tanggal, $data->jam_kembali);
+        $tmp = $presensi -> updateHistoryPresensiKembali($data->nik, $data->tanggal, date("H:i:s"));
+        // $tmp = $presensi -> updateHistoryPresensiKembali($data->nik, $data->tanggal, $data->jam_kembali);
         if ($tmp) {
             $result['status'] = 1;
             $result['message'] = "Jam kembali berhasil diupdate";

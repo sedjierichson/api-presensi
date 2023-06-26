@@ -23,14 +23,18 @@ class Presensi{
     }
 
     public function getAllDataByIsHistory($ishistory) {
-        $query = "SELECT presensi_pegawai.id, presensi_pegawai.nik, pegawai.nama, presensi_pegawai.id_kantor, kantor.nama as lokasi, presensi_pegawai.tanggal, presensi_pegawai2.jam_masuk, presensi_pegawai2.jam_keluar, presensi_pegawai.jam_masuk as jam_masuk_history, presensi_pegawai.jam_keluar as jam_keluar_history, TIMEDIFF(presensi_pegawai.jam_masuk , presensi_pegawai.jam_keluar) as durasi, TIME_TO_SEC(TIMEDIFF(presensi_pegawai.jam_masuk , presensi_pegawai.jam_keluar)) as detik, presensi_pegawai.foto, presensi_pegawai.kategori, presensi_pegawai.is_history, presensi_pegawai.status 
-        FROM `presensi_pegawai` 
-        LEFT JOIN pegawai ON pegawai.nik = presensi_pegawai.nik 
-        LEFT JOIN kantor on kantor.id = presensi_pegawai.id_kantor 
-        INNER JOIN presensi_pegawai as presensi_pegawai2
-        on presensi_pegawai2.tanggal = presensi_pegawai.tanggal
-        WHERE presensi_pegawai.is_history = $ishistory AND presensi_pegawai.status <> 0 AND presensi_pegawai2.is_history = 0
-        ORDER BY presensi_pegawai.tanggal DESC;;";
+        // $query = "SELECT presensi_pegawai.id, presensi_pegawai.nik, pegawai.nama, presensi_pegawai.id_kantor, kantor.nama as lokasi, presensi_pegawai.tanggal, presensi_pegawai2.jam_masuk, presensi_pegawai2.jam_keluar, presensi_pegawai.jam_masuk as jam_masuk_history, presensi_pegawai.jam_keluar as jam_keluar_history, TIMEDIFF(presensi_pegawai.jam_masuk , presensi_pegawai.jam_keluar) as durasi, TIME_TO_SEC(TIMEDIFF(presensi_pegawai.jam_masuk , presensi_pegawai.jam_keluar)) as detik, presensi_pegawai.foto, presensi_pegawai.kategori, presensi_pegawai.is_history, presensi_pegawai.status 
+        // FROM `presensi_pegawai` 
+        // LEFT JOIN pegawai ON pegawai.nik = presensi_pegawai.nik 
+        // LEFT JOIN kantor on kantor.id = presensi_pegawai.id_kantor 
+        // INNER JOIN presensi_pegawai as presensi_pegawai2
+        // on presensi_pegawai2.tanggal = presensi_pegawai.tanggal
+        // WHERE presensi_pegawai.is_history = $ishistory AND presensi_pegawai.status <> 0 AND presensi_pegawai2.is_history = 0
+        // ORDER BY presensi_pegawai.tanggal DESC;";
+        $query = "SELECT presensi_pegawai.id, presensi_pegawai.nik, pegawai.nama, presensi_pegawai.id_kantor, kantor.nama as lokasi, presensi_pegawai.tanggal, presensi_pegawai.jam_masuk, presensi_pegawai.jam_keluar,TIMEDIFF(presensi_pegawai.jam_keluar , presensi_pegawai.jam_masuk) as durasi, ABS(TIME_TO_SEC(TIMEDIFF(presensi_pegawai.jam_keluar , presensi_pegawai.jam_masuk))) as detik, presensi_pegawai.foto, presensi_pegawai.kategori, presensi_pegawai.is_history, presensi_pegawai.status 
+        FROM `presensi_pegawai`
+        LEFT JOIN pegawai ON pegawai.nik = presensi_pegawai.nik
+        LEFT JOIN kantor on kantor.id = presensi_pegawai.id_kantor WHERE presensi_pegawai.status <> 0 ORDER BY presensi_pegawai.nik, presensi_pegawai.tanggal DESC;";
         $stmt = $this->conn->prepare($query);
         $stmt->execute([(int)$ishistory]);
 
@@ -47,7 +51,7 @@ class Presensi{
         LEFT JOIN kantor on kantor.id = presensi_pegawai.id_kantor 
         INNER JOIN presensi_pegawai as presensi_pegawai2
         on presensi_pegawai2.tanggal = presensi_pegawai.tanggal
-        WHERE presensi_pegawai.nik = 9253 AND presensi_pegawai.tanggal = '2023-06-13' AND presensi_pegawai.is_history = 1 AND presensi_pegawai.status <> 0 AND presensi_pegawai2.is_history = 0 ORDER BY presensi_pegawai.tanggal DESC;;";
+        WHERE presensi_pegawai.nik = $nik AND presensi_pegawai.tanggal = '$tanggal' AND presensi_pegawai.is_history = 1 AND presensi_pegawai.status <> 0 AND presensi_pegawai2.is_history = 0 ORDER BY presensi_pegawai.tanggal DESC;;";
         $stmt = $this->conn->prepare($query);
         $stmt->execute([(int)$nik, $tanggal]);
 
