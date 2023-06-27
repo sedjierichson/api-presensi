@@ -22,6 +22,28 @@ class Presensi{
         return $row;
     }
 
+    // public function getAllDataByIsHistory($ishistory) {
+    //     // $query = "SELECT presensi_pegawai.id, presensi_pegawai.nik, pegawai.nama, presensi_pegawai.id_kantor, kantor.nama as lokasi, presensi_pegawai.tanggal, presensi_pegawai2.jam_masuk, presensi_pegawai2.jam_keluar, presensi_pegawai.jam_masuk as jam_masuk_history, presensi_pegawai.jam_keluar as jam_keluar_history, TIMEDIFF(presensi_pegawai.jam_masuk , presensi_pegawai.jam_keluar) as durasi, TIME_TO_SEC(TIMEDIFF(presensi_pegawai.jam_masuk , presensi_pegawai.jam_keluar)) as detik, presensi_pegawai.foto, presensi_pegawai.kategori, presensi_pegawai.is_history, presensi_pegawai.status 
+    //     // FROM `presensi_pegawai` 
+    //     // LEFT JOIN pegawai ON pegawai.nik = presensi_pegawai.nik 
+    //     // LEFT JOIN kantor on kantor.id = presensi_pegawai.id_kantor 
+    //     // INNER JOIN presensi_pegawai as presensi_pegawai2
+    //     // on presensi_pegawai2.tanggal = presensi_pegawai.tanggal
+    //     // WHERE presensi_pegawai.is_history = $ishistory AND presensi_pegawai.status <> 0 AND presensi_pegawai2.is_history = 0
+    //     // ORDER BY presensi_pegawai.tanggal DESC;";
+    //     $query = "SELECT presensi_pegawai.id, presensi_pegawai.nik, pegawai.nama, presensi_pegawai.id_kantor, kantor.nama as lokasi, presensi_pegawai.tanggal, presensi_pegawai.jam_masuk, presensi_pegawai.jam_keluar,TIMEDIFF(presensi_pegawai.jam_keluar , presensi_pegawai.jam_masuk) as durasi, ABS(TIME_TO_SEC(TIMEDIFF(presensi_pegawai.jam_keluar , presensi_pegawai.jam_masuk))) as detik, presensi_pegawai.foto, presensi_pegawai.kategori, presensi_pegawai.is_history, presensi_pegawai.status 
+    //     FROM `presensi_pegawai`
+    //     LEFT JOIN pegawai ON pegawai.nik = presensi_pegawai.nik
+    //     LEFT JOIN kantor on kantor.id = presensi_pegawai.id_kantor WHERE presensi_pegawai.status <> 0 ORDER BY presensi_pegawai.nik, presensi_pegawai.tanggal DESC;";
+    //     $stmt = $this->conn->prepare($query);
+    //     $stmt->execute([(int)$ishistory]);
+
+    //     $row = [];
+    //     while($data = $stmt->fetch(PDO::FETCH_OBJ))
+    //         $row[] = $data;
+
+    //     return $row;
+    // }
     public function getAllDataByIsHistory($ishistory) {
         // $query = "SELECT presensi_pegawai.id, presensi_pegawai.nik, pegawai.nama, presensi_pegawai.id_kantor, kantor.nama as lokasi, presensi_pegawai.tanggal, presensi_pegawai2.jam_masuk, presensi_pegawai2.jam_keluar, presensi_pegawai.jam_masuk as jam_masuk_history, presensi_pegawai.jam_keluar as jam_keluar_history, TIMEDIFF(presensi_pegawai.jam_masuk , presensi_pegawai.jam_keluar) as durasi, TIME_TO_SEC(TIMEDIFF(presensi_pegawai.jam_masuk , presensi_pegawai.jam_keluar)) as detik, presensi_pegawai.foto, presensi_pegawai.kategori, presensi_pegawai.is_history, presensi_pegawai.status 
         // FROM `presensi_pegawai` 
@@ -208,7 +230,7 @@ class Presensi{
     }
 
     public function insertHistoryPresensiKeluar($nik, $id_kantor, $tanggal, $jam_keluar, $url, $kategori, $is_history){
-        $query = "SELECT * FROM `$this->table` WHERE nik = ? AND tanggal = ? AND jam_masuk IS NULL AND is_history = 1 AND status = 1";
+        $query = "SELECT * FROM `$this->table` WHERE nik = ? AND tanggal = ? AND jam_masuk IS NULL AND is_history = 1 AND status = 1;";
         $stmt = $this->conn->prepare($query);
         $stmt->execute([$nik, $tanggal]);
         if ($stmt->rowCount() > 0) {
@@ -230,15 +252,60 @@ class Presensi{
         }
     }
 
-    public function updateHistoryPresensiKembali($nik, $tanggal, $jam_kembali){
-        $query = "UPDATE `$this->table` SET jam_masuk = ? WHERE nik = ? AND tanggal = ? AND jam_masuk IS NULL AND is_history = 1 AND status <> 0";
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute([$jam_kembali, (int)$nik, $tanggal]);
-        if ($stmt->rowCount() > 0) {
-            return true;
+    public function insertHistoryPresensiKeluar2($nik, $tanggal, $jam_masuk, $is_datang_pulang){
+        // $query = "SELECT * FROM `$this->table` WHERE nik = ? AND tanggal = ? AND jam_masuk IS NULL AND is_history = 1 AND status = 1";
+        // $stmt = $this->conn->prepare($query);
+        // $stmt->execute([$nik, $tanggal]);
+        // if ($stmt->rowCount() > 0) {
+        //     return -1;
+        // } else {
+            $query = "INSERT INTO `history` VALUES (DEFAULT, ?, ?, ?, NULL, ?)";
+            $stmt = $this->conn->prepare($query);
+            $stmt->execute([$tanggal, (int)$nik, $jam_masuk, $is_datang_pulang]);
+
+            if ($stmt->rowCount() > 0) {
+                $query_take = "SELECT * FROM `history` ORDER BY id DESC LIMIT 1";
+                $stmt = $this->conn->prepare($query_take);
+                $stmt->execute();
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                return $row['id'];
+            } else {
+                return false;
+            }
+        // }
+    }
+
+    // public function updateHistoryPresensiKembali($nik, $tanggal, $jam_kembali){
+    //     $query = "UPDATE `$this->table` SET jam_masuk = ? WHERE nik = ? AND tanggal = ? AND jam_masuk IS NULL AND is_history = 1 AND status <> 0";
+    //     $stmt = $this->conn->prepare($query);
+    //     $stmt->execute([$jam_kembali, (int)$nik, $tanggal]);
+    //     if ($stmt->rowCount() > 0) {
+    //         return true;
+    //     } else {
+    //         return false;
+    //     }
+    // }
+    public function updateHistoryPresensiKeluar($nik, $tanggal, $jam_keluar, $is_datang_pulang){
+        if ($is_datang_pulang == 1){
+            $query = "UPDATE `history` SET jam_keluar = ?, is_datang_pulang = ? WHERE nik = ? AND tanggal = ? AND jam_keluar IS NULL; DELETE FROM `$this->table` WHERE nik = ? and jam_masuk IS NULL;";
+            $stmt = $this->conn->prepare($query);
+            $stmt->execute([$jam_keluar, $is_datang_pulang,(int)$nik, $tanggal, (int)$nik]);
+            if ($stmt->rowCount() > 0) {
+                return true;
+            } else {
+                return false;
+            }
         } else {
-            return false;
+            $query = "UPDATE `history` SET jam_keluar = ? WHERE nik = ? AND tanggal = ? AND jam_keluar IS NULL; DELETE FROM `$this->table` WHERE nik = ? and jam_masuk IS NULL";
+            $stmt = $this->conn->prepare($query);
+            $stmt->execute([$jam_keluar, (int)$nik, $tanggal, (int)$nik]);
+            if ($stmt->rowCount() > 0) {
+                return true;
+            } else {
+                return false;
+            }
         }
+        
     }
 
     public function updateKategoriPresensi($id, $kategori){
