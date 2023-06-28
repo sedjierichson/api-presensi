@@ -53,10 +53,14 @@ class Presensi{
         // on presensi_pegawai2.tanggal = presensi_pegawai.tanggal
         // WHERE presensi_pegawai.is_history = $ishistory AND presensi_pegawai.status <> 0 AND presensi_pegawai2.is_history = 0
         // ORDER BY presensi_pegawai.tanggal DESC;";
-        $query = "SELECT presensi_pegawai.id, presensi_pegawai.nik, pegawai.nama, presensi_pegawai.id_kantor, kantor.nama as lokasi, presensi_pegawai.tanggal, presensi_pegawai.jam_masuk, presensi_pegawai.jam_keluar,TIMEDIFF(presensi_pegawai.jam_keluar , presensi_pegawai.jam_masuk) as durasi, ABS(TIME_TO_SEC(TIMEDIFF(presensi_pegawai.jam_keluar , presensi_pegawai.jam_masuk))) as detik, presensi_pegawai.foto, presensi_pegawai.kategori, presensi_pegawai.is_history, presensi_pegawai.status 
-        FROM `presensi_pegawai`
-        LEFT JOIN pegawai ON pegawai.nik = presensi_pegawai.nik
-        LEFT JOIN kantor on kantor.id = presensi_pegawai.id_kantor WHERE presensi_pegawai.status <> 0 ORDER BY presensi_pegawai.nik, presensi_pegawai.tanggal DESC;";
+        // $query = "SELECT presensi_pegawai.id, presensi_pegawai.nik, pegawai.nama, presensi_pegawai.id_kantor, kantor.nama as lokasi, presensi_pegawai.tanggal, presensi_pegawai.jam_masuk, presensi_pegawai.jam_keluar,TIMEDIFF(presensi_pegawai.jam_keluar , presensi_pegawai.jam_masuk) as durasi, ABS(TIME_TO_SEC(TIMEDIFF(presensi_pegawai.jam_keluar , presensi_pegawai.jam_masuk))) as detik, presensi_pegawai.foto, presensi_pegawai.kategori, presensi_pegawai.is_history, presensi_pegawai.status 
+        // FROM `presensi_pegawai`
+        // LEFT JOIN pegawai ON pegawai.nik = presensi_pegawai.nik
+        // LEFT JOIN kantor on kantor.id = presensi_pegawai.id_kantor WHERE presensi_pegawai.status <> 0 ORDER BY presensi_pegawai.nik, presensi_pegawai.tanggal DESC;";
+        $query = "SELECT history.id, history.tanggal, history.nik, pegawai.nama, history.jam_masuk, history.jam_keluar, history.is_datang_pulang, TIMEDIFF(history.jam_keluar , history.jam_masuk) as durasi, ABS(TIME_TO_SEC(TIMEDIFF(history.jam_keluar , history.jam_masuk))) as detik
+        FROM history
+        LEFT JOIN pegawai ON pegawai.nik = history.nik
+        ORDER BY history.nik, history.tanggal DESC";
         $stmt = $this->conn->prepare($query);
         $stmt->execute([(int)$ishistory]);
 
