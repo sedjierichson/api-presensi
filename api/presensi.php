@@ -86,10 +86,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         // } else {
         if ($_POST['is_history'] == 1){
             $tmp = $presensi->insertHistoryPresensiKeluar($_POST['nik'], $_POST['id_kantor'], $_POST['tanggal'], date("H:i:s"), 'http://127.0.0.1:8888/api-presensi/api-presensi/api/files/'.$_POST['img_name'],  $_POST['kategori'], $_POST['is_history']);
-            $tmp2 = $presensi->insertHistoryPresensiKeluar2($_POST['nik'],$_POST['tanggal'], date("H:i:s"), 0);
+            $tmp2 = $presensi->insertHistoryPresensiKeluar2($_POST['nik'],$_POST['tanggal'], $_POST['jam_masuk'], 0);
         } else {
             $tmp = $presensi->insertPresensiMasukPegawai($_POST['nik'], $_POST['id_kantor'], $_POST['tanggal'], date("H:i:s"), 'http://127.0.0.1:8888/api-presensi/api-presensi/api/files/'.$_POST['img_name'],  $_POST['kategori'], $_POST['is_history']);
-            $tmp2 = $presensi->insertHistoryPresensiKeluar2($_POST['nik'], $_POST['tanggal'], date("H:i:s"), 1);
+            // $tmp2 = $presensi->insertHistoryPresensiKeluar2($_POST['nik'], $_POST['tanggal'], date("H:i:s"), 1);
+            $tmp2 = $presensi->insertHistoryPresensiKeluar2($_POST['nik'], $_POST['tanggal'], $_POST['jam_masuk'], 1);
         }
 
         if ($tmp == false) {
@@ -155,6 +156,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         }
     } else if (isset($data->jam_kembali) && isset($data->nik) && isset($data->tanggal)){
         // $tmp = $presensi -> updateHistoryPresensiKembali($data->nik, $data->tanggal, date("H:i:s"));
+        // $tmp = $presensi -> updateHistoryPresensiKeluar($data->nik, $data->tanggal, date("H:i:s"), 0);
         $tmp = $presensi -> updateHistoryPresensiKeluar($data->nik, $data->tanggal, date("H:i:s"), 0);
         if ($tmp) {
             $result['status'] = 1;
